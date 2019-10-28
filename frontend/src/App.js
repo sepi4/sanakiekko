@@ -1,9 +1,13 @@
-import React from 'react';
+import React from 'react'
 
-function App() {
+import Login from './components/Login'
+
+function App({socket}) {
   return (
-    <div>app</div>
-  );
+    <div>
+      <Login socket={socket} />
+    </div>
+  )
 }
 
-export default App;
+export default App
