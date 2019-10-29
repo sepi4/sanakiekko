@@ -1,15 +1,24 @@
 import React, { useState } from 'react'
 
+import { useCustomErrorHandler } from './hooks'
+
+
 function Login({ socket, setUser }) {
   const [name, setName] = useState('')
   const [room, setRoom] = useState('')
 
+  const [error, showError] = useCustomErrorHandler()
+
   const handleLogin = (e) => {
-    console.log('hhhh')
     e.preventDefault()
-    socket.emit('join', { name, room }, (user) => {
-      // console.log('join callback client', user)
-      setUser(user)
+    socket.emit('join', { name, room }, ({user, error}) => {
+      if (error) {
+        showError(error)
+      }
+      else {
+        console.log('user')
+        setUser(user)
+      }
     })
     setName('')
     setRoom('')
@@ -17,11 +26,14 @@ function Login({ socket, setUser }) {
 
   return (
     <div>
-      <form onSubmit={handleLogin}>
-        nimi<input type='text' value={name} onChange={(e) => setName(e.target.value)} /><br/>
-        huone<input type='text' value={room} onChange={(e) => setRoom(e.target.value)}/><br/>
-        <button>kirjaudu</button>
-      </form>
+      {!error
+          ? <form onSubmit={handleLogin}>
+            nimi<input type='text' value={name} onChange={(e) => setName(e.target.value)} /><br/>
+            huone<input type='text' value={room} onChange={(e) => setRoom(e.target.value)}/><br/>
+            <button>kirjaudu</button>
+          </form>
+          : <p style={{color: 'red'}}>{error}</p>
+      }
     </div>
   )
 }

@@ -20,17 +20,11 @@ io.on('connection', socket => {
   console.log('connection', socket.id)
 
   socket.on('join', ({ name, room }, callback) => {
-    name = name.trim().toLowerCase()
-    room = room.trim().toLowerCase()
-
-
-    if (!name || !room) {
-      return {
-        error: 'Name and room was provided incorrectly'
-      }
+    const { error, user } = addUser(socket.id, name, room)
+    if (error) {
+      return callback({ error })
     }
-    const newUser = addUser(socket, name, room)
-    callback(newUser)
+    callback({ user })
   })
 })
 

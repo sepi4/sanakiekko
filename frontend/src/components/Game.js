@@ -1,10 +1,12 @@
 import React from 'react'
 
-function Game({ socket }) {
+function Game({ socket, user, handleLogout }) {
 
   return (
     <div>
-      game
+      <div>
+        {user.name} <button onClick={handleLogout}>kirjaudu ulos</button>
+      </div>
     </div>
   )
 }

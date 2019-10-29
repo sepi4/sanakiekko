@@ -1,0 +1,4 @@
+pvm   | aika (t) | tyo
+-------------------------------------------------------------------------------
+29.10 | 4        | alku juttuja, että saa jotain toimimaan
+29.10 | 2        | custom hooks asettamista ja opettelua, login komponentille
