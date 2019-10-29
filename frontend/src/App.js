@@ -1,11 +1,16 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 import Login from './components/Login'
+import Game from './components/Game'
 
 function App({socket}) {
+  const [user, setUser] = useState(null)
   return (
     <div>
-      <Login socket={socket} />
+      {!user
+        ? <Login socket={socket} setUser={setUser} />
+        : <Game />
+      }
     </div>
   )
 }

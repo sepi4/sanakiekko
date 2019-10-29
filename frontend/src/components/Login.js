@@ -1,14 +1,15 @@
 import React, { useState } from 'react'
 
-function Login({ socket }) {
+function Login({ socket, setUser }) {
   const [name, setName] = useState('')
   const [room, setRoom] = useState('')
 
   const handleLogin = (e) => {
     console.log('hhhh')
     e.preventDefault()
-    socket.emit('join', { name, room }, () => {
-      console.log('join callback client')
+    socket.emit('join', { name, room }, (user) => {
+      // console.log('join callback client', user)
+      setUser(user)
     })
     setName('')
     setRoom('')

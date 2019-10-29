@@ -12,10 +12,25 @@ const io = socketIO(server)
 
 app.use(express.static(publicPath))
 
+const { addUser } = require('./users')
+
+let users = []
+
 io.on('connection', socket => {
   console.log('connection', socket.id)
-  socket.on('join', () => {
 
+  socket.on('join', ({ name, room }, callback) => {
+    name = name.trim().toLowerCase()
+    room = room.trim().toLowerCase()
+
+
+    if (!name || !room) {
+      return {
+        error: 'Name and room was provided incorrectly'
+      }
+    }
+    const newUser = addUser(socket, name, room)
+    callback(newUser)
   })
 })
 
