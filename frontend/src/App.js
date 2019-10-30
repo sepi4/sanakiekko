@@ -6,8 +6,9 @@ import Game from './components/Game'
 function App({socket}) {
   const [user, setUser] = useState(null)
   const handleLogout = () => {
-    setUser(null)
+    socket.emit('disconnectNow')
     localStorage.removeItem('sanakiekkoUserId')
+    setUser(null)
   }
   console.log('App')
   return (

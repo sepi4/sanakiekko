@@ -1,23 +1,17 @@
 import React from 'react'
 
+import UsersList from './UsersList'
+import Navbar from './Navbar'
+
+
 function Game({ socket, user, handleLogout }) {
-  socket.on('usersList', (data) => {
-    console.log('usersList', data)
-  })
-
-  socket.on('allUsers', (data) => {
-    console.log('allUsers', data)
-  })
-
-
   return (
     <div>
-      <div style={{
-        backgroundColor: "yellow",
-        padding: '5px',
-      }}>
-        huone: {user.room}, käyttäjä: {user.name} <button onClick={handleLogout}>kirjaudu ulos</button>
-      </div>
+      <Navbar 
+        user={user}
+        handleLogout={handleLogout}
+      />
+      <UsersList socket={socket} />
     </div>
   )
 }

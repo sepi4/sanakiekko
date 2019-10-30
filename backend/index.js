@@ -14,7 +14,13 @@ const uuidv1 = require('uuid/v1');
 
 app.use(express.static(publicPath))
 
-const { addUser, connectUser, removeUser, allUsers } = require('./users')
+const { 
+  addUser, 
+  connectUser, 
+  removeUserNow, 
+  removeUserLater, 
+  allUsers,
+} = require('./users')
 
 
 io.on('connection', socket => {
@@ -37,14 +43,20 @@ io.on('connection', socket => {
   })
 
   socket.on('reconnectUser', (id, callback) => {
-    const user = connectUser(id)
+    const user = connectUser(id, socket.id)
     callback(user)
+    io.emit('allUsers', allUsers())
+  })
+
+  socket.on('disconnectNow', () => {
+    console.log('dis')
+    const user = removeUserNow(socket.id)
+    io.emit('allUsers', allUsers())
   })
 
   socket.on('disconnect', () => {
-    // console.log(socket.id)
-    const user = removeUser(socket.id)
-    // console.log(user, 'was disconnected')
+    const user = removeUserLater(socket.id)
+    io.emit('allUsers', allUsers())
   })
 
 })

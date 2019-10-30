@@ -4,3 +4,5 @@ pvm   | aika (t) | tyo
 29.10 | 2        | custom hooks asettamista ja opettelua, login komponentille
 30.10 | 5        | reconnectin implementointi ja selvittäminen
 30.10 | 1        | virheilmoituksen korjaus, kaikki nykyiset käyttäjät näkyviin
+30.10 | 1        | uudet komponentit, Navbar, UsersList
+30.10 | 1        | virheiden korjailua, en pääse eroon 'tate update on an unmounted component'
