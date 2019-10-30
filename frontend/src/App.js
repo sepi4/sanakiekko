@@ -9,6 +9,7 @@ function App({socket}) {
     setUser(null)
     localStorage.removeItem('sanakiekkoUserId')
   }
+  console.log('App')
   return (
     <div>
       {

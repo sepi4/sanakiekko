@@ -29,11 +29,12 @@ function connectUser(id) {
 }
 
 function removeUser(socketId) {
-  console.log('removeUser', socketId)
+  // console.log('removeUser', socketId)
   for (let u of users) {
     if (u.socketId === socketId) {
       u.connected = false    
       setTimeout(() => {
+        // console.log('setTimeout')
         if (!u.connected)
           users = users.filter(user => user.socketId !== socketId)
       }, 5000)
@@ -42,8 +43,15 @@ function removeUser(socketId) {
   }
 }
 
+function allUsers() {
+  return users.map(u => {
+    return u
+  })
+}
+
 module.exports = {
   addUser,
   connectUser,
   removeUser,
+  allUsers,
 }

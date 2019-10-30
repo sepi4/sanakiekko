@@ -5,12 +5,18 @@ function Game({ socket, user, handleLogout }) {
     console.log('usersList', data)
   })
 
+  socket.on('allUsers', (data) => {
+    console.log('allUsers', data)
+  })
+
 
   return (
     <div>
-      <div>
-        {user.name} <button onClick={handleLogout}>kirjaudu ulos</button>
-        <p>huone: {user.room}</p>
+      <div style={{
+        backgroundColor: "yellow",
+        padding: '5px',
+      }}>
+        huone: {user.room}, käyttäjä: {user.name} <button onClick={handleLogout}>kirjaudu ulos</button>
       </div>
     </div>
   )

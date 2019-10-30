@@ -13,7 +13,7 @@ function Login({ socket, setUser }) {
     const id = localStorage.getItem('sanakiekkoUserId')
     if (id) {
       socket.emit('reconnectUser', id, (user) => {
-        console.log('reconnect callback', user)
+        // console.log('reconnect callback', user)
         if (user) {
           setUser(user)
         } else {
@@ -37,6 +37,7 @@ function Login({ socket, setUser }) {
     })
   }
 
+  console.log('Login')
   return (
     <div>
       <form onSubmit={handleLogin}>
