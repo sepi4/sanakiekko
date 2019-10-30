@@ -49,9 +49,9 @@ function removeUserLater(socketId) {
     if (u.socketId === socketId) {
       u.connected = false    
       setTimeout(() => {
-        console.log('setTimeout')
+        // console.log('setTimeout')
         if (!u.connected) {
-          console.log('filtering users')
+          // console.log('filtering users')
           users = users.filter(user => user.socketId !== socketId)
         }
       }, 5000)
@@ -61,7 +61,7 @@ function removeUserLater(socketId) {
 }
 
 function allUsers() {
-  console.log(users.length)
+  // console.log(users.length)
   return users.map(u => {
     return u
   })

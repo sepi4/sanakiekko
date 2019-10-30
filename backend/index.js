@@ -43,13 +43,14 @@ io.on('connection', socket => {
   })
 
   socket.on('reconnectUser', (id, callback) => {
+    console.log('reconnectUser')
     const user = connectUser(id, socket.id)
     callback(user)
     io.emit('allUsers', allUsers())
   })
 
   socket.on('disconnectNow', () => {
-    console.log('dis')
+    // console.log('dis')
     const user = removeUserNow(socket.id)
     io.emit('allUsers', allUsers())
   })
