@@ -4,9 +4,9 @@ export function useCustomErrorHandler() {
   const [error, setError] = useState(null)
   const handleError = (error) => {
     setError(error)
-    const interval = setInterval(() => {
+    const t = setTimeout(() => {
       setError(null)
-      clearInterval(interval)
+      clearTimeout(t)
     }, 2000)
   }
   return [error, handleError]

@@ -7,6 +7,7 @@ function App({socket}) {
   const [user, setUser] = useState(null)
   const handleLogout = () => {
     setUser(null)
+    localStorage.removeItem('sanakiekkoUserId')
   }
   return (
     <div>
