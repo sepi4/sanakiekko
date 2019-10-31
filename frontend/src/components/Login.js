@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react'
 
 import { useCustomErrorHandler } from './hooks'
 
+import { Message, Button, Form, } from 'semantic-ui-react'
+
 
 function Login({ socket, setUser }) {
   const [name, setName] = useState('')
@@ -37,15 +39,26 @@ function Login({ socket, setUser }) {
     })
   }
 
-  console.log('Login')
+  // console.log('Login')
   return (
     <div>
-      <form onSubmit={handleLogin}>
-        nimi<input type='text' value={name} onChange={(e) => setName(e.target.value)} /><br/>
-        huone<input type='text' value={room} onChange={(e) => setRoom(e.target.value)}/><br/>
-        <button>kirjaudu</button>
-        {error && <span style={{color: 'red'}}>{error}</span>}
-      </form>
+      <Form error onSubmit={handleLogin}>
+        <Form.Input 
+          label='nimi' 
+          type='text' 
+          value={name} 
+          onChange={(e) => setName(e.target.value)} />
+        <Form.Input 
+          label='huone' 
+          type='text' 
+          value={room} 
+          onChange={(e) => setRoom(e.target.value)}/>
+        <Button>kirjaudu</Button>
+        <Message
+          error
+          header={error}
+        />
+      </Form>
     </div>
   )
 }

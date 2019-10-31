@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
+import 'semantic-ui-css/semantic.min.css'
 
 import io from 'socket.io-client'
 const socket = io("http://127.0.0.1:1111")

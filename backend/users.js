@@ -5,7 +5,7 @@ function addUser(id, name, room, socketId) {
   room = room.trim().toLowerCase()
   if (!name || !room) {
     return {
-      error: 'Name and room was provided incorrectly'
+      error: 'nimi ja huone on annettu väärin'
     }
   }
   if (users.find(u => u.name === name)) {

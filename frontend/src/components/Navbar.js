@@ -1,14 +1,16 @@
 import React from 'react'
+
+import { Menu, Button } from 'semantic-ui-react'
+
 function Navbar({ user, handleLogout }) {
   return (
-    <div>
-      <div style={{
-        backgroundColor: "yellow",
-        padding: '5px',
-      }}>
-        huone: {user.room}, käyttäjä: {user.name} <button onClick={handleLogout}>kirjaudu ulos</button>
-      </div>
-    </div>
+    <Menu>
+      <Menu.Item>huone: {user.room}</Menu.Item>
+      <Menu.Item>käyttäjä: {user.name}</Menu.Item>
+      <Menu.Item>
+        <Button onClick={handleLogout}>kirjaudu ulos</Button>
+      </Menu.Item>
+    </Menu>
   )
 }
 

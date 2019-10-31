@@ -3,6 +3,8 @@ import React, { useState } from 'react'
 import Login from './components/Login'
 import Game from './components/Game'
 
+import { Container } from 'semantic-ui-react'
+
 function App({socket}) {
   const [user, setUser] = useState(null)
   const handleLogout = () => {
@@ -12,7 +14,7 @@ function App({socket}) {
   }
   console.log('App')
   return (
-    <div>
+    <Container>
       {
         !user
           ? <Login 
@@ -25,7 +27,7 @@ function App({socket}) {
             handleLogout={handleLogout}
           />
       }
-    </div>
+    </Container>
   )
 }
 
