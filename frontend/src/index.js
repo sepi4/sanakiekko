@@ -4,5 +4,6 @@ import App from './App';
 
 import io from 'socket.io-client'
 const socket = io("http://127.0.0.1:1111")
+// console.log(new Date().getTime())
 
 ReactDOM.render(<App socket={socket} />, document.getElementById('root'));

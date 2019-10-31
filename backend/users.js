@@ -54,7 +54,7 @@ function removeUserLater(socketId) {
           // console.log('filtering users')
           users = users.filter(user => user.socketId !== socketId)
         }
-      }, 5000)
+      }, 60000)
       return u      
     }
   }

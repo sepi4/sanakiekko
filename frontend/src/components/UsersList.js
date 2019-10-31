@@ -1,19 +1,41 @@
-import React, { useState, useEffect } from 'react'
+import React, { 
+  useState, 
+  useEffect, 
+  useLayoutEffect,
+} from 'react'
 
 function UsersList({ socket }) {
   const [users, setUsers] = useState([])
 
-  console.log('UsersList socket', socket)
+
+  // console.log(new Date().getTime())
+
+  // socket.on('allUsers', (users) => {
+  //   setUsers(users)
+  // })
 
   useEffect(() => {
+  // useLayoutEffect(() => {
     console.log('useEffect')
+
     socket.on('allUsers', (users) => {
+      console.log('allUsers')
       setUsers(users)
     })
+    // socket.emit('loadAllUsers')
+
     return () => {
       socket.off('allUsers')
     }
-  },[socket])
+  }, [socket])
+
+  useEffect(() => {
+    console.log(socket.id)
+    socket.emit('loadAllUsers', (users) => {
+      console.log('loadAllUsers callback')
+      setUsers(users)
+    })
+  }, [socket])
 
   return (
     <ul>
@@ -31,13 +53,17 @@ function UsersList({ socket }) {
 //   }
 
 //   componentDidMount() {
-//     this.props.socket.on('allUsers', (users) => {
-//       users = users.map(u => <li key={u.socketId}>{u.name}</li>)
-//       this.setState({
-//         users
+//     console.log(new Date().getTime())
+//     // setTimeout(()=> {
+//       this.props.socket.on('allUsers', (users) => {
+//         // users = users.map(u => <li key={u.socketId}>{u.name}</li>)
+//         this.setState({
+//           users
+//         })
 //       })
-//     })
+//     // }, 1)
 //   }
+
 //   componentWillUnmount() {
 //     this.props.socket.off('allUsers')
 //   }
@@ -45,7 +71,7 @@ function UsersList({ socket }) {
 //   render() {
 //     return (
 //       <ul>
-//         {this.state.users}
+//         {this.state.users.map(u => <li key={u.socketId}>{u.name}</li>)}
 //       </ul>
 //     )
 //   }
