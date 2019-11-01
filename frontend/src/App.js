@@ -19,10 +19,10 @@ function App({socket}) {
         !user
           ? 
             <Grid>
-              <Grid.Column width={4} >
+              <Grid.Column width={7} >
                 <UsersList socket={socket} />
               </Grid.Column>
-              <Grid.Column width={12} >
+              <Grid.Column width={9} >
                 <Login socket={socket} setUser={setUser} />
               </Grid.Column>
             </Grid>

@@ -35,25 +35,25 @@ function UsersList({ socket }) {
 
   useEffect(() => {
     socket.emit('loadAllUsers', (users) => {
+      console.log('useEffect users', users)
       setUsers(users)
     })
   }, [socket])
 
 
-  let arr = toRoomsAndNames(users)
+  // let arr = toRoomsAndNames(users)
   return (
     <div>
-      <h3>Käyttäjät</h3>
+      <h3>Huoneet - käyttäjät</h3>
       <ul>
-        {Object.keys(arr)
+        {users
             .map((room, i) => 
-              <li key={room + i}>{room}
+              <li key={room.roomName + i}>{room.roomName}
               <ul>
-                {arr[room].map(user => <li key={user.name}>{user.name}</li>)}
+                {room.users.map(user => <li key={user.name}>{user.name}</li>)}
               </ul>
             </li>)
         }
-        {/* {sortBy(users, 'room').map(u => <li key={u.socketId}>{u.name} -> {u.room}</li>)} */}
       </ul>
     </div>
   )

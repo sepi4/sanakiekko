@@ -1,69 +1,96 @@
-let users = []
+let rooms = []
 
-function addUser(id, name, room, socketId) {
+function addUser(id, name, roomName, socketId) {
   name = name.trim().toLowerCase()
-  room = room.trim().toLowerCase()
-  if (!name || !room) {
+  roomName = roomName.trim().toLowerCase()
+  if (!name || !roomName) {
     return {
       error: 'nimi ja huone on annettu väärin'
     }
   }
-  if (users.find(u => u.name === name)) {
-    return {
-      error: `'${name}' is already taken`
+  for (let r of rooms) {
+    if (r.users.find(u => u.name === name)) {
+      return {
+        error: `username '${name}' is already taken`
+      }
     }
+    if (r.roomName === roomName) {
+      return {
+        error: `room name '${roomName}' is already taken`
+      }
+    }
+  }
+  let roomToAdd = rooms.find(r => r.name === roomName)
+  if (!roomToAdd) {
+    rooms.push({
+      roomName,
+      users: [],
+    })
+    roomToAdd = rooms[rooms.length - 1]
   }
   const user = {
     name,
-    room,
+    roomName,
     id,
     socketId,
     connected: true,
   }
-  users = users.concat(user)
+  roomToAdd.users = roomToAdd.users.concat(user)
+  console.log(rooms)
   return { user }
 }
 
 function connectUser(id, newSocketId) {
-  for (let u of users) {
-    if (u.id === id) {
-      u.connected = true    
-      u.socketId = newSocketId
-      return u      
+  for (let room of rooms) {
+    for (let u of room.users) {
+      if (u.id === id) {
+        u.connected = true    
+        u.socketId = newSocketId
+        return u      
+      }
     }
   }
 }
 
 function removeUserNow(socketId) {
-  for ( let i = 0; i < users.length; i++) {
-    if (users[i].socketId === socketId) {
-      const user = users[i]
-      users.splice(i, 1)
-      return user
+  let index = 0
+  for (let room of rooms) {
+    for ( let i = 0; i < room.users.length; i++) {
+      if (room.users[i].socketId === socketId) {
+        const user = room.users[i]
+        room.users.splice(i, 1)
+        if (room.users.length < 1) {
+          rooms.splice(index, 1)
+        }
+        console.log('removeUserNow', rooms)
+        return user
+      }
     }
+    index++
   }
 }
 
 function removeUserLater(socketId) {
-  for (let u of users) {
-    if (u.socketId === socketId) {
-      u.connected = false    
-      setTimeout(() => {
-        // console.log('setTimeout')
-        if (!u.connected) {
-          // console.log('filtering users')
-          users = users.filter(user => user.socketId !== socketId)
-        }
-      }, 60000)
-      return u      
+  for (let room of rooms) {
+    for (let u of room.users) {
+      if (u.socketId === socketId) {
+        u.connected = false    
+        setTimeout(() => {
+          // console.log('setTimeout')
+          if (!u.connected) {
+            removeUserNow(socketId)
+            // console.log('filtering users')
+            // users = users.filter(user => user.socketId !== socketId)
+          }
+        }, 3000)
+        return u      
+      }
     }
   }
 }
 
 function allUsers() {
-  return users.map(u => {
-    return u
-  })
+  return rooms
 }
 
 module.exports = {

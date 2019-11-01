@@ -47,14 +47,9 @@ io.on('connection', socket => {
     const user = connectUser(id, socket.id)
     callback(user)
     io.emit('allUsers', allUsers())
-    console.log(new Date().getTime())
-    // setTimeout(() => {
-    //   io.emit('allUsers', allUsers())
-    // }, 1)
   })
 
   socket.on('disconnectNow', () => {
-    // console.log('dis')
     const user = removeUserNow(socket.id)
     io.emit('allUsers', allUsers())
   })
@@ -68,7 +63,7 @@ io.on('connection', socket => {
     console.log('loadAllUsers', socket.id)
     callback(allUsers())
     // const user = removeUserLater(socket.id)
-    // io.emit('allUsers', allUsers())
+    io.emit('allUsers', allUsers())
   })
 
 })
