@@ -61,7 +61,6 @@ function removeUserLater(socketId) {
 }
 
 function allUsers() {
-  // console.log(users.length)
   return users.map(u => {
     return u
   })

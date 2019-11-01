@@ -8,3 +8,4 @@ pvm   | aika (t) | tyo
 30.10 | 1        | virheiden korjailua, en pääse eroon 'tate update on an unmounted component'
 31.10 | 1.5      | reload bugin korjaukseen mennyt aika
 1.10  | 1.5      | css asennuksia, Semantic ui komponentit
+1.10  | 3        | ui tekemistä ja erilaisten vaihtoehtojen kokeilua

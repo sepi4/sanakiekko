@@ -1,80 +1,60 @@
-import React, { 
-  useState, 
-  useEffect, 
-  useLayoutEffect,
-} from 'react'
+import React, { useState, useEffect, } from 'react'
+
+import { toRoomsAndNames } from '../utils/helper'
 
 function UsersList({ socket }) {
   const [users, setUsers] = useState([])
 
+  const sortBy = (arr, key) => {
+    arr.sort(function(a, b) {
+      const A = a[key].toUpperCase()
+      const B = b[key].toUpperCase()
+      if (A < B) return -1
+      if (A > B) return 1
+      return 0
+    })
+    return arr
+  }
 
-  // console.log(new Date().getTime())
-
-  // socket.on('allUsers', (users) => {
-  //   setUsers(users)
-  // })
+  // const rooms = (arr) => {
+  //   return arr.reduce((pre, cur) => {
+  //     if (pre.indexOf(cur.room) < 0) {
+  //       return cur
+  //     }
+  //   }, [])
+  // }
 
   useEffect(() => {
-  // useLayoutEffect(() => {
-    console.log('useEffect')
-
     socket.on('allUsers', (users) => {
-      console.log('allUsers')
       setUsers(users)
     })
-    // socket.emit('loadAllUsers')
-
     return () => {
       socket.off('allUsers')
     }
   }, [socket])
 
   useEffect(() => {
-    console.log(socket.id)
     socket.emit('loadAllUsers', (users) => {
-      console.log('loadAllUsers callback')
       setUsers(users)
     })
   }, [socket])
 
+  if ( users ) console.log(toRoomsAndNames(users))
+  if ( users ) console.log(toRoomsAndNames(users))
+
+  const arr = toRoomsAndNames(users)
+
+
   return (
-    <ul>
-      {users.map(u => <li key={u.socketId}>{u.name}</li>)}
-    </ul>
+    <div>
+      <h3>Online</h3>
+      <ul>
+        {Object.keys(arr).map(key => <li>{key} - <ul>{arr[key].map(u => <li>{u.name}</li>)}</ul></li>)}
+        {/* {sortBy(users, 'room').map(u => <li key={u.socketId}>{u.name} -> {u.room}</li>)} */}
+      </ul>
+    </div>
   )
 }
 
-// class UsersList extends React.Component {
-//   constructor (props) {
-//     super(props)
-//     this.state = {
-//       users: []
-//     }
-//   }
-
-//   componentDidMount() {
-//     console.log(new Date().getTime())
-//     // setTimeout(()=> {
-//       this.props.socket.on('allUsers', (users) => {
-//         // users = users.map(u => <li key={u.socketId}>{u.name}</li>)
-//         this.setState({
-//           users
-//         })
-//       })
-//     // }, 1)
-//   }
-
-//   componentWillUnmount() {
-//     this.props.socket.off('allUsers')
-//   }
-
-//   render() {
-//     return (
-//       <ul>
-//         {this.state.users.map(u => <li key={u.socketId}>{u.name}</li>)}
-//       </ul>
-//     )
-//   }
-// }
 
 export default UsersList

@@ -2,8 +2,9 @@ import React, { useState } from 'react'
 
 import Login from './components/Login'
 import Game from './components/Game'
+import UsersList from './components/UsersList'
 
-import { Container } from 'semantic-ui-react'
+import { Container, Grid } from 'semantic-ui-react'
 
 function App({socket}) {
   const [user, setUser] = useState(null)
@@ -12,20 +13,25 @@ function App({socket}) {
     localStorage.removeItem('sanakiekkoUserId')
     setUser(null)
   }
-  console.log('App')
   return (
     <Container>
       {
         !user
-          ? <Login 
-            socket={socket} 
-            setUser={setUser} 
-          />
-          : <Game 
-            socket={socket} 
-            user={user}
-            handleLogout={handleLogout}
-          />
+          ? 
+            <Grid>
+              <Grid.Column width={4} >
+                <UsersList socket={socket} />
+              </Grid.Column>
+              <Grid.Column width={12} >
+                <Login socket={socket} setUser={setUser} />
+              </Grid.Column>
+            </Grid>
+          : 
+            <Game 
+              socket={socket} 
+              user={user}
+              handleLogout={handleLogout}
+            />
       }
     </Container>
   )
