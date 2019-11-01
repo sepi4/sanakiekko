@@ -9,3 +9,4 @@ pvm   | aika (t) | tyo
 31.10 | 1.5      | reload bugin korjaukseen mennyt aika
 1.10  | 1.5      | css asennuksia, Semantic ui komponentit
 1.10  | 3        | ui tekemistä ja erilaisten vaihtoehtojen kokeilua
+1.10  | 3        | frontissa pelikentan virittamista, backissa randomLetterfunction keskiminen ja tekemistä

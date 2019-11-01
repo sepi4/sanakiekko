@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 
 import Login from './components/Login'
-import Game from './components/Game'
+import Logged from './components/Logged'
 import UsersList from './components/UsersList'
 
 import { Container, Grid } from 'semantic-ui-react'
@@ -27,7 +27,7 @@ function App({socket}) {
               </Grid.Column>
             </Grid>
           : 
-            <Game 
+            <Logged 
               socket={socket} 
               user={user}
               handleLogout={handleLogout}

@@ -5,16 +5,16 @@ import { toRoomsAndNames } from '../utils/helper'
 function UsersList({ socket }) {
   const [users, setUsers] = useState([])
 
-  const sortBy = (arr, key) => {
-    arr.sort(function(a, b) {
-      const A = a[key].toUpperCase()
-      const B = b[key].toUpperCase()
-      if (A < B) return -1
-      if (A > B) return 1
-      return 0
-    })
-    return arr
-  }
+  // const sortBy = (arr, key) => {
+  //   arr.sort(function(a, b) {
+  //     const A = a[key].toUpperCase()
+  //     const B = b[key].toUpperCase()
+  //     if (A < B) return -1
+  //     if (A > B) return 1
+  //     return 0
+  //   })
+  //   return arr
+  // }
 
   // const rooms = (arr) => {
   //   return arr.reduce((pre, cur) => {
@@ -39,17 +39,20 @@ function UsersList({ socket }) {
     })
   }, [socket])
 
-  if ( users ) console.log(toRoomsAndNames(users))
-  if ( users ) console.log(toRoomsAndNames(users))
 
-  const arr = toRoomsAndNames(users)
-
-
+  let arr = toRoomsAndNames(users)
   return (
     <div>
-      <h3>Online</h3>
+      <h3>Käyttäjät</h3>
       <ul>
-        {Object.keys(arr).map(key => <li>{key} - <ul>{arr[key].map(u => <li>{u.name}</li>)}</ul></li>)}
+        {Object.keys(arr)
+            .map((room, i) => 
+              <li key={room + i}>{room}
+              <ul>
+                {arr[room].map(user => <li key={user.name}>{user.name}</li>)}
+              </ul>
+            </li>)
+        }
         {/* {sortBy(users, 'room').map(u => <li key={u.socketId}>{u.name} -> {u.room}</li>)} */}
       </ul>
     </div>

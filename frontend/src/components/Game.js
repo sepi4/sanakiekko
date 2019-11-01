@@ -1,15 +1,15 @@
-import React from 'react'
-
-import Navbar from './Navbar'
+import React, { useState } from 'react'
 
 
-function Game({ socket, user, handleLogout }) {
+function Game() {
+  
   return (
     <div>
-      <Navbar 
-        user={user}
-        handleLogout={handleLogout}
-      />
+      <div> a b c d e f ... </div>
+      <div>
+        <input type="text" />
+      </div>
+      <div>chatti</div>
     </div>
   )
 }
