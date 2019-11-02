@@ -1,6 +1,6 @@
 // letter info from http://jkorpela.fi/kielikello/kirjtil.html
 // kirjakielen
-export function newRandomLetters(letterCount) {
+function newRandomLetters(letterCount) {
   let letterArr = []
   const arr = [
     ['a', 11.9],
@@ -46,4 +46,8 @@ export function newRandomLetters(letterCount) {
     }
   }
   return letterArr
+}
+
+module.exports = {
+  newRandomLetters,
 }

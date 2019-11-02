@@ -14,3 +14,4 @@ pvm   | aika (t) | tyo
 2.10  | 1        | bugien korjailua
 2.10  | 1        | bugien korjaus, lisätty sopivat iconit navbariin
 2.10  | 2.5      | taistelu react routen kanssa. Huoneille omat routit kirjautumisen perusteella
+2.10  | 1        | typerän bugin koiraus backendissa, puuttui join huoneeseen

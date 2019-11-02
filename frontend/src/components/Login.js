@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { useHistory } from 'react-router-dom'
 
 import { useCustomErrorHandler } from './hooks'
 
@@ -9,8 +10,10 @@ function Login({ socket, handleSetUser }) {
   const [room, setRoom] = useState('')
 
   const [error, showError] = useCustomErrorHandler()
+  const history = useHistory()
 
   useEffect(() => {
+    history.push('')
     const id = localStorage.getItem('sanakiekkoUserId')
     if (id) {
       socket.emit('reconnectUser', id, user => {
@@ -22,7 +25,7 @@ function Login({ socket, handleSetUser }) {
         }
       })
     }
-  }, [socket, handleSetUser])
+  }, [socket, handleSetUser, history])
 
   const handleLogin = e => {
     e.preventDefault()
@@ -37,7 +40,6 @@ function Login({ socket, handleSetUser }) {
     })
   }
 
-  // console.log('Login')
   return (
     <div>
       <Form error onSubmit={handleLogin}>

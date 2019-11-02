@@ -22,6 +22,8 @@ const {
   allUsers,
 } = require('./rooms')
 
+const { newRandomLetters } = require('./utils')
+
 io.on('connection', socket => {
   socket.on('join', ({ name, room }, callback) => {
     const { error, user } = addUser(uuidv1(), name, room, socket.id)
@@ -29,6 +31,8 @@ io.on('connection', socket => {
     if (error) {
       return callback({ error })
     }
+    socket.join(room)
+
     callback({ user })
 
     io.emit('allUsers', allUsers())
@@ -54,6 +58,10 @@ io.on('connection', socket => {
     callback(allUsers())
     // const user = removeUserLater(socket.id)
     io.emit('allUsers', allUsers())
+  })
+
+  socket.on('newGame', (user) => {
+    io.to(user.roomName).emit('newLetters', newRandomLetters(7))
   })
 })
 
