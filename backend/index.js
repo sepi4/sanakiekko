@@ -35,24 +35,22 @@ io.on('connection', socket => {
   })
 
   socket.on('reconnectUser', (id, callback) => {
-    console.log('reconnectUser')
     const user = connectUser(id, socket.id)
     callback(user)
     io.emit('allUsers', allUsers())
   })
 
   socket.on('disconnectNow', () => {
-    const user = removeUserNow(socket.id)
+    removeUserNow(socket.id)
     io.emit('allUsers', allUsers())
   })
 
   socket.on('disconnect', () => {
-    const user = removeUserLater(socket.id)
+    removeUserLater(socket.id)
     io.emit('allUsers', allUsers())
   })
 
   socket.on('loadAllUsers', callback => {
-    console.log('loadAllUsers', socket.id)
     callback(allUsers())
     // const user = removeUserLater(socket.id)
     io.emit('allUsers', allUsers())
