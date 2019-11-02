@@ -1,8 +1,6 @@
 import React, { useState } from 'react'
 
-
-function Game() {
-  
+function Room() {
   return (
     <div>
       <div> a b c d e f ... </div>
@@ -14,4 +12,4 @@ function Game() {
   )
 }
 
-export default Game
+export default Room

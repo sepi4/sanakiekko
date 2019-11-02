@@ -20,7 +20,7 @@ const {
   removeUserNow,
   removeUserLater,
   allUsers,
-} = require('./users')
+} = require('./rooms')
 
 io.on('connection', socket => {
   socket.on('join', ({ name, room }, callback) => {
