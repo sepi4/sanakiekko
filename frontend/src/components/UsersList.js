@@ -1,7 +1,5 @@
 import React, { useState, useEffect, } from 'react'
 
-import { toRoomsAndNames } from '../utils/helper'
-
 function UsersList({ socket }) {
   const [users, setUsers] = useState([])
 
@@ -16,13 +14,6 @@ function UsersList({ socket }) {
   //   return arr
   // }
 
-  // const rooms = (arr) => {
-  //   return arr.reduce((pre, cur) => {
-  //     if (pre.indexOf(cur.room) < 0) {
-  //       return cur
-  //     }
-  //   }, [])
-  // }
 
   useEffect(() => {
     socket.on('allUsers', (users) => {

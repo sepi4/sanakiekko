@@ -1,12 +1,16 @@
-// let rooms = []
+let rooms = []
 
-// function addNewRoom(roomName) {
-//   let newRoom = {
-//     name: roomName,
-//     game: {
-//       state: null,
-//       letters: [],
-//     },
-//     users: [],
-//   }
-// }
+function addNewRoom(roomName) {
+  let newRoom = {
+    name: roomName,
+    game: {
+      state: null,
+      letters: [],
+    },
+    users: [],
+  }
+}
+
+const kissa = () => {
+  let rooms = []
+}
