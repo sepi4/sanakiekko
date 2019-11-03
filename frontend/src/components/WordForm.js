@@ -4,7 +4,7 @@ import { Form, Message, Button, Input } from 'semantic-ui-react'
 
 import { subSet } from '../utils/helpers'
 
-function WordForm({ letters }) {
+function WordForm({ letters, socket }) {
   const [error, setError] = useState(null)
 
   let inputWord = useRef()
@@ -19,21 +19,32 @@ function WordForm({ letters }) {
     let word = e.target.value
     word.split('')
     if (!subSet(word, letters)) {
-      setError('virhe')
-    } else {
+      setError('sanassa vääriä kirjaimia')
+    }  else {
       setError(null)
     }
-    console.log('testWord', letters)
+    // console.log('testWord', letters)
   }
 
   const returnWord = e => {
+    // console.log('returnWord')
+    let word = inputWord.current.value
     e.preventDefault()
-    console.log('returnWord')
+    if (error) {
+      setError('virhe')
+    } else if (word.length < 5) {
+      setError('sana liian lyhyt')
+    } else {
+      socket.emit('returnWord', word)
+      inputWord.current.value = ''
+    }
   }
   return (
     <Form error onSubmit={returnWord}>
-      <Input ref={inputWord} type="text" onChange={testWord} />
-      <Button type='submit' color='blue'>tallenna</Button>
+      <input ref={inputWord} type="text" onChange={testWord} />
+      <Button type="submit" disabled={error !== null} color="blue">
+        tallenna
+      </Button>
       <Message error header={error} />
     </Form>
   )

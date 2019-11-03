@@ -102,6 +102,16 @@ function newLetters(roomName) {
   }
 }
 
+function addWordToUser(socketId, word) {
+  for (let r of rooms) {
+    let user = r.users.find(u => u.socketId === socketId)
+    if (user) {
+      user.words.push(word)
+      return r
+    }
+  }
+}
+
 module.exports = {
   addUser,
   connectUser,
@@ -109,4 +119,5 @@ module.exports = {
   removeUserLater,
   allUsers,
   newLetters,
+  addWordToUser,
 }
