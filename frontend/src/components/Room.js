@@ -1,29 +1,43 @@
 import React, { useState, useEffect } from 'react'
-import { Button } from 'semantic-ui-react'
+import { Button, Input } from 'semantic-ui-react'
+import WordForm from './WordForm'
 
 function Room({ socket, user }) {
   const [letters, setLetters] = useState([])
 
   useEffect(() => {
-    console.log('useEffect')
-    socket.on('newLetters', data => {
-      console.log('newLetters', data)
+    socket.emit('getRoomInfo', user.roomName, res => {
+      setLetters(res.game.letters)
     })
-  }, [])
 
-  const handleNewGame = () => {
+    socket.on('updateRoomInfo', room => {
+      console.log('updateRoomInfo', room)
+      setLetters(room.game.letters)
+    })
+    return () => {
+      socket.off('updateRoomInfo')
+    }
+  }, [socket, user.roomName])
+
+  const handleNewLetters = () => {
     // console.log(socket)
-    socket.emit('newGame', user)
+    socket.emit('newLetters', user)
   }
 
   return (
     <div>
-      <div>{letters}</div>
       <div>
-        <input type="text" />
+        {letters.map((l, i) => (
+          <Button color="blue" key={'letter' + i}>
+            {l}
+          </Button>
+        ))}
       </div>
-      <Button onClick={handleNewGame}>uusi peli</Button>
-      <div>chatti</div>
+      <Button onClick={handleNewLetters}>uudet kirjaimet</Button>
+      <div>{letters.length > 0 && <WordForm letters={letters} />}</div>
+      <div>minun sanat</div>
+      <div>huoneen muut pelajat</div>
+      <div>chatti alla</div>
     </div>
   )
 }

@@ -20,9 +20,10 @@ const {
   removeUserNow,
   removeUserLater,
   allUsers,
+  newLetters,
 } = require('./rooms')
 
-const { newRandomLetters } = require('./utils')
+const { removeProperties } = require('./utils')
 
 io.on('connection', socket => {
   socket.on('join', ({ name, room }, callback) => {
@@ -34,12 +35,15 @@ io.on('connection', socket => {
     socket.join(room)
 
     callback({ user })
-
     io.emit('allUsers', allUsers())
   })
 
   socket.on('reconnectUser', (id, callback) => {
     const user = connectUser(id, socket.id)
+    if (!user || !user.roomName) {
+      return
+    }
+    socket.join(user.roomName)
     callback(user)
     io.emit('allUsers', allUsers())
   })
@@ -60,8 +64,15 @@ io.on('connection', socket => {
     io.emit('allUsers', allUsers())
   })
 
-  socket.on('newGame', (user) => {
-    io.to(user.roomName).emit('newLetters', newRandomLetters(7))
+  socket.on('newLetters', user => {
+    const room = newLetters(user.roomName)
+    // room = removeProperties(room)
+    io.to(user.roomName).emit('updateRoomInfo', room)
+  })
+
+  socket.on('getRoomInfo', (roomName, callback) => {
+    const room = allUsers().find(r => r.roomName === roomName)
+    callback(room)
   })
 })
 

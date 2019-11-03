@@ -1,3 +1,4 @@
+const { newRandomLetters } = require('./utils')
 let rooms = []
 
 function addUser(id, name, roomName, socketId) {
@@ -20,6 +21,14 @@ function addUser(id, name, roomName, socketId) {
     rooms.push({
       roomName,
       users: [],
+      game: {
+        letters: [],
+        active: false,
+        rules: {
+          maxWords: 10,
+          lettersCount: 7,
+        },
+      },
     })
     roomToAdd = rooms[rooms.length - 1]
   }
@@ -29,6 +38,7 @@ function addUser(id, name, roomName, socketId) {
     id,
     socketId,
     connected: true,
+    words: [],
   }
   roomToAdd.users = roomToAdd.users.concat(user)
   return { user }
@@ -56,7 +66,6 @@ function removeUserNow(socketId) {
         if (room.users.length < 1) {
           rooms.splice(index, 1)
         }
-        console.log('removeUserNow', rooms)
         return user
       }
     }
@@ -84,10 +93,20 @@ function allUsers() {
   return rooms
 }
 
+function newLetters(roomName) {
+  for (let r of rooms) {
+    if (r.roomName === roomName) {
+      r.game.letters = newRandomLetters(r.game.rules.lettersCount)
+      return r
+    }
+  }
+}
+
 module.exports = {
   addUser,
   connectUser,
   removeUserNow,
   removeUserLater,
   allUsers,
+  newLetters,
 }

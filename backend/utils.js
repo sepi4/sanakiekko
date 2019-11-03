@@ -48,6 +48,16 @@ function newRandomLetters(letterCount) {
   return letterArr
 }
 
+function removeProperties(room) {
+  // room = JSON.parse(JSON.stringify(room))
+  for (let u of room.users) {
+    delete u.id
+    delete u.socketId
+  }
+  return room
+}
+
 module.exports = {
   newRandomLetters,
+  removeProperties,
 }
