@@ -18,3 +18,4 @@ pvm   | aika (t) | tyo
 3.10  | 6        | front ja backendissa peliin uutta toiminnallisuutta: kirjaiten arvonta, sanojen tarkistusta. Paljon bugien korjausta ja ratkaisujen etsintää.
 3.10  | 1.5      | front ja back
 4.10  | 1.5      | pelin toiminnallisuuden tekemistä, kokeilua ja testailua
+4.10  | 3        | backendissa: tarkistukset uusille sanoille, sanojen poisto. front: uusiin komponentteihin jako

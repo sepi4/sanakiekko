@@ -1,4 +1,4 @@
-const { newRandomLetters, } = require('./utils')
+const { newRandomLetters, subSet } = require('./utils')
 
 let rooms = []
 
@@ -105,12 +105,31 @@ function newLetters(roomName) {
 }
 
 function addWordToUser(socketId, word) {
+  word = word.trim()
+  for (let r of rooms) {
+    let user = r.users.find(u => u.socketId === socketId)
+    if (user && subSet(word, r.game.letters) && !user.words.includes(word)) {
+      user.words.push(word)
+      user.wordsCount = user.words.length
+      return { room: r }
+    } else {
+      return {
+        error: 'Server: virhe sanan lisäyksessä',
+      }
+    }
+  }
+}
+
+function removeWord(socketId, word) {
   for (let r of rooms) {
     let user = r.users.find(u => u.socketId === socketId)
     if (user) {
-      user.words.push(word)
-      user.wordsCount = user.words.length
-      return r
+      user.words = user.words.filter(w => w !== word)
+      return { room: r }
+    } else {
+      return {
+        error: 'Server: virhe sanan poistossa',
+      }
     }
   }
 }
@@ -123,4 +142,5 @@ module.exports = {
   allUsers,
   newLetters,
   addWordToUser,
+  removeWord,
 }

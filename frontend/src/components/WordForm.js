@@ -1,11 +1,13 @@
 import React, { useState, useRef, useEffect } from 'react'
 
-import { Form, Message, Button, Input } from 'semantic-ui-react'
+import { Form, Message, Button } from 'semantic-ui-react'
 
 import { subSet } from '../utils/helpers'
+import { useCustomErrorHandler } from './hooks'
 
 function WordForm({ letters, socket }) {
   const [error, setError] = useState(null)
+  const [serverError, showServerError] = useCustomErrorHandler()
 
   let inputWord = useRef()
 
@@ -20,10 +22,9 @@ function WordForm({ letters, socket }) {
     word.split('')
     if (!subSet(word, letters)) {
       setError('sanassa vääriä kirjaimia')
-    }  else {
+    } else {
       setError(null)
     }
-    // console.log('testWord', letters)
   }
 
   const returnWord = e => {
@@ -35,19 +36,26 @@ function WordForm({ letters, socket }) {
     } else if (word.length < 5) {
       setError('sana liian lyhyt')
     } else {
-      socket.emit('returnWord', word)
+      socket.emit('addWord', word, error => {
+        showServerError(error)
+      })
       inputWord.current.value = ''
     }
   }
-  return (
-    <Form error onSubmit={returnWord}>
-      <input ref={inputWord} type="text" onChange={testWord} />
-      <Button type="submit" disabled={error !== null} color="blue">
-        tallenna
-      </Button>
-      <Message error header={error} />
-    </Form>
-  )
+  if (letters.length > 0) {
+    return (
+      <Form error onSubmit={returnWord}>
+        <input ref={inputWord} type="text" onChange={testWord} />
+        <Button type="submit" disabled={error !== null} color="blue">
+          tallenna
+        </Button>
+        <Message error header={error} />
+        <Message error header={serverError} />
+      </Form>
+    )
+  } else {
+    return null
+  }
 }
 
 export default WordForm

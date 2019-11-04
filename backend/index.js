@@ -22,6 +22,7 @@ const {
   allUsers,
   newLetters,
   addWordToUser,
+  removeWord,
 } = require('./rooms')
 
 const { removeProperties } = require('./utils')
@@ -67,7 +68,7 @@ io.on('connection', socket => {
   })
 
   socket.on('newLetters', user => {
-    const room = newLetters(user.roomName)
+    newLetters(user.roomName)
     // room = removeProperties(room)
     // io.to(user.roomName).emit('updateRoomInfo', room)
     io.emit('allUsers', allUsers())
@@ -78,11 +79,26 @@ io.on('connection', socket => {
     callback(allUsers())
   })
 
-  socket.on('returnWord', word => {
-    const room = addWordToUser(socket.id, word)
+  socket.on('addWord', (word, callback) => {
+    // const room = addWordToUser(socket.id, word)
     // io.to(room.roomName).emit('updateRoomInfo', room)
-    io.emit('allUsers', allUsers())
+    const { room, error } = addWordToUser(socket.id, word)
+    if (error) {
+      callback(error)
+    } else {
+      io.emit('allUsers', allUsers())
+    }
   })
+
+  socket.on('removeWord', (word, callback) => {
+    const { room, error } = removeWord(socket.id, word)
+    if (error) {
+      callback(error)
+    } else {
+      io.emit('allUsers', allUsers())
+    }
+  })
+
 })
 
 server.listen(port, () => {
