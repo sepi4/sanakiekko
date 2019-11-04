@@ -37,6 +37,7 @@ io.on('connection', socket => {
 
     callback({ user })
     io.emit('allUsers', allUsers())
+    // io.to(room.roomName).emit('updateRoomInfo', room)
   })
 
   socket.on('reconnectUser', (id, callback) => {
@@ -45,7 +46,7 @@ io.on('connection', socket => {
       return
     }
     socket.join(user.roomName)
-    // callback(user)
+    callback(user)
     io.emit('allUsers', allUsers())
   })
 
@@ -68,17 +69,19 @@ io.on('connection', socket => {
   socket.on('newLetters', user => {
     const room = newLetters(user.roomName)
     // room = removeProperties(room)
-    io.to(user.roomName).emit('updateRoomInfo', room)
+    // io.to(user.roomName).emit('updateRoomInfo', room)
+    io.emit('allUsers', allUsers())
   })
 
-  socket.on('getRoomInfo', (roomName, callback) => {
-    const room = allUsers().find(r => r.roomName === roomName)
-    callback(room)
+  socket.on('getRoomsInfo', (roomName, callback) => {
+    // const room = allUsers().find(r => r.roomName === roomName)
+    callback(allUsers())
   })
 
   socket.on('returnWord', word => {
     const room = addWordToUser(socket.id, word)
-    io.to(room.roomName).emit('updateRoomInfo', room)
+    // io.to(room.roomName).emit('updateRoomInfo', room)
+    io.emit('allUsers', allUsers())
   })
 })
 

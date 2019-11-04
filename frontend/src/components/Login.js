@@ -16,8 +16,9 @@ function Login({ socket, handleSetUser }) {
     history.push('')
     const id = localStorage.getItem('sanakiekkoUserId')
     if (id) {
+      // console.log('before reconnect')
       socket.emit('reconnectUser', id, user => {
-        // console.log('reconnect callback', user)
+        console.log('reconnect callback', user)
         if (user) {
           handleSetUser(user)
         } else {

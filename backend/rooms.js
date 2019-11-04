@@ -1,4 +1,5 @@
-const { newRandomLetters } = require('./utils')
+const { newRandomLetters, } = require('./utils')
+
 let rooms = []
 
 function addUser(id, name, roomName, socketId) {
@@ -39,6 +40,7 @@ function addUser(id, name, roomName, socketId) {
     socketId,
     connected: true,
     words: [],
+    wordsCount: 0,
   }
   roomToAdd.users = roomToAdd.users.concat(user)
   return { user }
@@ -82,7 +84,7 @@ function removeUserLater(socketId) {
           if (!u.connected) {
             removeUserNow(socketId)
           }
-        }, 3000)
+        }, 30000)
         return u
       }
     }
@@ -107,6 +109,7 @@ function addWordToUser(socketId, word) {
     let user = r.users.find(u => u.socketId === socketId)
     if (user) {
       user.words.push(word)
+      user.wordsCount = user.words.length
       return r
     }
   }

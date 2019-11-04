@@ -7,18 +7,19 @@ function Room({ socket, user }) {
   const [users, setUsers] = useState([])
 
   useEffect(() => {
-    socket.emit('getRoomInfo', user.roomName, room => {
+    socket.emit('getRoomsInfo', user.roomName, rooms => {
+      const room = rooms.find(r => r.roomName === user.roomName)
       setLetters(room.game.letters)
-      setUsers(room.users.map(u => u.name))
+      setUsers(room.users.filter(u => u.connected))
     })
 
-    socket.on('updateRoomInfo', room => {
-      console.log('updateRoomInfo', room)
+    socket.on('allUsers', rooms => {
+      const room = rooms.find(r => r.roomName === user.roomName)
       setLetters(room.game.letters)
-      setUsers(room.users.map(u => u.name))
+      setUsers(room.users.filter(u => u.connected))
     })
     return () => {
-      socket.off('updateRoomInfo')
+      socket.off('allUsers')
     }
   }, [socket, user.roomName])
 
@@ -40,12 +41,18 @@ function Room({ socket, user }) {
       <div>
         {letters.length > 0 && <WordForm socket={socket} letters={letters} />}
       </div>
-
-      <div>minun sanat</div>
+      <div>minun sanat:</div>
       <div>
-        {users}
+        pelajaat:
+        <ul>
+          {users.map((u, i) => (
+            <li key={u + i}>
+              {u.name} - {u.words.length}
+            </li>
+          ))}
+        </ul>
       </div>
-      <div>chatti alla</div>
+      <div>chatti:</div>
     </div>
   )
 }
