@@ -28,6 +28,7 @@ function addUser(id, name, roomName, socketId) {
         checking: false,
         rules: {
           maxWords: 3,
+          minWordLength: 3,
           lettersCount: 7,
         },
       },
@@ -41,6 +42,7 @@ function addUser(id, name, roomName, socketId) {
     socketId,
     connected: true,
     words: [],
+    points: 0,
     wordsCount: 0,
   }
   roomToAdd.users = roomToAdd.users.concat(user)
@@ -96,24 +98,29 @@ function allUsers() {
   return rooms
 }
 
-function newLetters(roomName) {
-  for (let r of rooms) {
-    if (r.roomName === roomName) {
-      r.game.letters = newRandomLetters(r.game.rules.lettersCount)
-      r.game.active = true
-      return r
-    }
+function newLetters(socketId) {
+  let { room, user } = findRoomAndUser(socketId)
+  removeAllWords(room)
+  if (room.roomName) {
+    room.game.letters = newRandomLetters(room.game.rules.lettersCount)
+    room.game.active = true
+    return room
   }
 }
 
-function addWordToUser(socketId, word) {
-  word = word.trim()
+function addWordToUser(socketId, text) {
+  text = text.trim()
+  const word = {
+    text,
+    usersAccepted: [],
+  }
   let { room, user } = findRoomAndUser(socketId)
   if (
     user &&
-    subSet(word, room.game.letters) &&
-    !user.words.includes(word) &&
-    room.game.active
+    subSet(word.text, room.game.letters) &&
+    !user.words.find(w => w.text === word.text) &&
+    room.game.active &&
+    room.game.rules.minWordLength <= word.text.length
   ) {
     user.words.push(word)
     user.wordsCount = user.words.length
@@ -127,10 +134,10 @@ function addWordToUser(socketId, word) {
   }
 }
 
-function removeWord(socketId, word) {
+function removeWord(socketId, text) {
   let { room, user } = findRoomAndUser(socketId)
   if (user && room && room.game.active) {
-    user.words = user.words.filter(w => w !== word)
+    user.words = user.words.filter(w => w.text !== text)
     return { room }
   }
   return {
@@ -156,6 +163,43 @@ function findRoomAndUser(socketId) {
   }
 }
 
+function removeAllWords(room) {
+  for (let u of room.users) {
+    u.words = []
+  }
+}
+
+function removeAllPoints(room) {
+  for (let u of room.users) {
+    u.points = 0
+  }
+}
+
+function toggleWord(modifiedUser, word, accepterSocketId) {
+  let accepter = findRoomAndUser(accepterSocketId)
+  let accepterRoom = accepter.room
+  let accepterUser = accepter.user
+
+  let { room, user } = findRoomAndUser(modifiedUser.socketId)
+
+  if (room && user && accepterRoom && accepterUser) {
+    let wordObj = user.words.find(w => w.text === word.text)
+    console.log('toggleWord', 'if', wordObj.usersAccepted)
+    if (wordObj) {
+      if (wordObj.usersAccepted.find(id => id === accepterUser.id)) {
+        wordObj.usersAccepted = wordObj.usersAccepted.filter(
+          id => id !== accepterUser.id,
+        )
+      } else {
+        wordObj.usersAccepted.push(accepterUser.id)
+      }
+    } else {
+      return { error: 'Server: virhe sanan togglauksessa' }
+    }
+  }
+  return { error: 'Server: virhe sanan togglauksessa' }
+}
+
 module.exports = {
   addUser,
   connectUser,
@@ -165,4 +209,5 @@ module.exports = {
   newLetters,
   addWordToUser,
   removeWord,
+  toggleWord,
 }

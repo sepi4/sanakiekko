@@ -33,7 +33,7 @@ function WordForm({ letters, socket }) {
     e.preventDefault()
     if (error) {
       setError('virhe')
-    } else if (word.length < 5) {
+    } else if (word.length < 1) {
       setError('sana liian lyhyt')
     } else {
       socket.emit('addWord', word, error => {
@@ -42,6 +42,7 @@ function WordForm({ letters, socket }) {
       inputWord.current.value = ''
     }
   }
+
   if (letters.length > 0) {
     return (
       <Form error onSubmit={returnWord}>

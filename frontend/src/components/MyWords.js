@@ -7,10 +7,10 @@ function MyWords({ words, removeWord }) {
       minun sanat:
       <ul>
         {words.map((w, i) => (
-          <li key={w + i} style={{ listStyle: 'none' }}>
-            {w}
+          <li key={w.text + i} style={{ listStyle: 'none' }}>
+            {w.text}
             <Button
-              onClick={() => removeWord(w)}
+              onClick={() => removeWord(w.text)}
               size="mini"
               color="red"
               style={{ margin: '5px' }}

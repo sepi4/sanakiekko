@@ -23,6 +23,7 @@ const {
   newLetters,
   addWordToUser,
   removeWord,
+  toggleWord,
 } = require('./rooms')
 
 const { removeProperties } = require('./utils')
@@ -68,7 +69,7 @@ io.on('connection', socket => {
   })
 
   socket.on('newLetters', user => {
-    newLetters(user.roomName)
+    newLetters(socket.id)
     // room = removeProperties(room)
     // io.to(user.roomName).emit('updateRoomInfo', room)
     io.emit('allUsers', allUsers())
@@ -99,9 +100,16 @@ io.on('connection', socket => {
     }
   })
 
-  socket.on('checkWords', () => {
-    
+  socket.on('toggleWord', ({ user, word }) => {
+    const { error } = toggleWord(user, word, socket.id)
+    if (error) {  
+      // callback(error)
+    } else {
+      io.emit('allUsers', allUsers())
+    }
   })
+
+  // socket.on('checkWords', () => {})
 })
 
 server.listen(port, () => {

@@ -7,7 +7,7 @@ function PlayersList({ users }) {
       <ul>
         {users.map((u, i) => (
           <li key={u + i} style={{ listStyle: 'none' }}>
-            {u.name} - {u.words.length}
+            {u.name} - sanoja: {u.words.length}, pisteitä: {u.points}
           </li>
         ))}
       </ul>
