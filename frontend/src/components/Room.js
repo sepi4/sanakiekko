@@ -1,16 +1,19 @@
 import React, { useState, useEffect } from 'react'
 
-import { Button } from 'semantic-ui-react'
+import { Button, Message } from 'semantic-ui-react'
 
 import WordForm from './WordForm'
 import PlayersList from './PlayersList'
 import MyWords from './MyWords'
 import Letters from './Letters'
 
+import { useCustomErrorHandler } from './hooks'
+
 function Room({ socket, user }) {
   const [letters, setLetters] = useState([])
   const [users, setUsers] = useState([])
   const [myWords, setMyWords] = useState(user.words)
+  const [error, showError] = useCustomErrorHandler()
 
   useEffect(() => {
     socket.emit('getRoomsInfo', user.roomName, rooms => {
@@ -37,11 +40,14 @@ function Room({ socket, user }) {
   }
 
   const removeWord = (word) => {
-    socket.emit('removeWord', word)
+    socket.emit('removeWord', word, (error) => {
+      showError(error)
+    })
   }
 
   return (
     <div>
+      {error && <Message error header={error} />}
       <Button onClick={handleNewLetters}>uudet kirjaimet</Button>
       <Letters letters={letters} />
       <WordForm socket={socket} letters={letters} />

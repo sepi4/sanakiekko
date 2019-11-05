@@ -6,7 +6,7 @@ function PlayersList({ users }) {
       pelajaat:
       <ul>
         {users.map((u, i) => (
-          <li key={u + i}>
+          <li key={u + i} style={{ listStyle: 'none' }}>
             {u.name} - {u.words.length}
           </li>
         ))}

@@ -25,8 +25,9 @@ function addUser(id, name, roomName, socketId) {
       game: {
         letters: [],
         active: false,
+        checking: false,
         rules: {
-          maxWords: 10,
+          maxWords: 3,
           lettersCount: 7,
         },
       },
@@ -99,6 +100,7 @@ function newLetters(roomName) {
   for (let r of rooms) {
     if (r.roomName === roomName) {
       r.game.letters = newRandomLetters(r.game.rules.lettersCount)
+      r.game.active = true
       return r
     }
   }
@@ -106,30 +108,50 @@ function newLetters(roomName) {
 
 function addWordToUser(socketId, word) {
   word = word.trim()
-  for (let r of rooms) {
-    let user = r.users.find(u => u.socketId === socketId)
-    if (user && subSet(word, r.game.letters) && !user.words.includes(word)) {
-      user.words.push(word)
-      user.wordsCount = user.words.length
-      return { room: r }
-    } else {
-      return {
-        error: 'Server: virhe sanan lisäyksessä',
-      }
+  let { room, user } = findRoomAndUser(socketId)
+  if (
+    user &&
+    subSet(word, room.game.letters) &&
+    !user.words.includes(word) &&
+    room.game.active
+  ) {
+    user.words.push(word)
+    user.wordsCount = user.words.length
+    if (user.words.length === room.game.rules.maxWords) {
+      checkWords(socketId)
     }
+    return { room }
+  }
+  return {
+    error: 'Server: virhe sanan lisäyksessä',
   }
 }
 
 function removeWord(socketId, word) {
+  let { room, user } = findRoomAndUser(socketId)
+  if (user && room && room.game.active) {
+    user.words = user.words.filter(w => w !== word)
+    return { room }
+  }
+  return {
+    error: 'Server: virhe sanan poistossa',
+  }
+}
+
+function checkWords(socketId) {
+  let { room, user } = findRoomAndUser(socketId)
+  if (room.game) {
+    room.game.active = false
+    room.game.checking = true
+  }
+  return { room }
+}
+
+function findRoomAndUser(socketId) {
   for (let r of rooms) {
     let user = r.users.find(u => u.socketId === socketId)
     if (user) {
-      user.words = user.words.filter(w => w !== word)
-      return { room: r }
-    } else {
-      return {
-        error: 'Server: virhe sanan poistossa',
-      }
+      return { room: r, user }
     }
   }
 }

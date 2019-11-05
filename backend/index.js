@@ -99,6 +99,9 @@ io.on('connection', socket => {
     }
   })
 
+  socket.on('checkWords', () => {
+    
+  })
 })
 
 server.listen(port, () => {
