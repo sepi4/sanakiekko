@@ -1,9 +1,9 @@
 import React from 'react'
+import TogglableCard from './TogglableCard'
 
-function PlayersList({ users }) {
+export default function PlayersList({ users }) {
   return (
-    <div>
-      pelajaat:
+    <TogglableCard header="pelaajat">
       <ul>
         {users.map((u, i) => (
           <li key={u + i} style={{ listStyle: 'none' }}>
@@ -11,8 +11,6 @@ function PlayersList({ users }) {
           </li>
         ))}
       </ul>
-    </div>
+    </TogglableCard>
   )
 }
-
-export default PlayersList

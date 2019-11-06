@@ -21,3 +21,4 @@ pvm   | aika (t) | tyo
 4.10  | 3        | backendissa: tarkistukset uusille sanoille, sanojen poisto. front: uusiin komponentteihin jako
 5.10  | 1.5      | backend
 5.10  | 4        | pelin toiminnallisuuden tekemistä, esim. sanojen tarkistusta ja näyttämistä
+6.10  | 3        | refaktorointia, uusia komponentteja

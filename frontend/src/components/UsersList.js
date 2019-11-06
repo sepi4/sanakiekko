@@ -51,13 +51,13 @@ function UsersList({ socket }) {
       <h3>Huoneet - käyttäjät</h3>
       <ul>
         {users.map((room, i) => (
-          <li key={room.roomName + i}>
+          <li key={room.roomName + i} style={{ listStyle: 'none' }}>
             <Button size="mini" compact color={colors[i % (colors.length - 1)]}>
               {room.roomName}
             </Button>
             <ul>
               {room.users.map(user => (
-                <li key={user.name}>{user.name}</li>
+                <li key={user.name} style={{ listStyle: 'none' }}>{user.name}</li>
               ))}
             </ul>
           </li>

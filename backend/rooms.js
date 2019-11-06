@@ -1,4 +1,4 @@
-const { newRandomLetters, subSet } = require('./utils')
+const { newRandomLetters, subSet, toggleValueInArray } = require('./utils')
 
 let rooms = []
 
@@ -104,6 +104,7 @@ function newLetters(socketId) {
   if (room.roomName) {
     room.game.letters = newRandomLetters(room.game.rules.lettersCount)
     room.game.active = true
+    room.game.checking = false
     return room
   }
 }
@@ -184,15 +185,11 @@ function toggleWord(modifiedUser, word, accepterSocketId) {
 
   if (room && user && accepterRoom && accepterUser) {
     let wordObj = user.words.find(w => w.text === word.text)
-    console.log('toggleWord', 'if', wordObj.usersAccepted)
     if (wordObj) {
-      if (wordObj.usersAccepted.find(id => id === accepterUser.id)) {
-        wordObj.usersAccepted = wordObj.usersAccepted.filter(
-          id => id !== accepterUser.id,
-        )
-      } else {
-        wordObj.usersAccepted.push(accepterUser.id)
-      }
+      wordObj.usersAccepted = toggleValueInArray(
+        wordObj.usersAccepted,
+        accepterUser.id,
+      )
     } else {
       return { error: 'Server: virhe sanan togglauksessa' }
     }

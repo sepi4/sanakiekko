@@ -7,6 +7,7 @@ import PlayersList from './PlayersList'
 import MyWords from './MyWords'
 import Letters from './Letters'
 import Checking from './Checking'
+import Chat from './Chat'
 
 import { useCustomErrorHandler } from './hooks'
 
@@ -53,9 +54,9 @@ function Room({ socket, user }) {
     <div>
       {error && <Message error header={error} />}
       <Letters letters={letters} />
+      <Button onClick={handleNewLetters}>uudet kirjaimet</Button>
       {!checking ? (
         <>
-          <Button onClick={handleNewLetters}>uudet kirjaimet</Button>
           <WordForm socket={socket} letters={letters} />
           <MyWords words={myWords} removeWord={removeWord} />
         </>
@@ -63,7 +64,7 @@ function Room({ socket, user }) {
         <Checking user={user} socket={socket} />
       )}
       <PlayersList users={users} />
-      <div>chatti:</div>
+      <Chat />
     </div>
   )
 }

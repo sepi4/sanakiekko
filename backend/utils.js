@@ -70,9 +70,18 @@ function subSet(arr1, arr2) {
   return true
 }
 
+function toggleValueInArray(arr, value) {
+  if (arr.find(element => element === value)) {
+    arr = arr.filter(element => element !== value)
+  } else {
+    arr.push(value)
+  }
+  return arr
+}
 
 
 module.exports = {
   newRandomLetters,
   subSet,
+  toggleValueInArray,
 }

@@ -1,9 +1,10 @@
 import React from 'react'
 import { Button } from 'semantic-ui-react'
+import TogglableCard from './TogglableCard'
 
 function MyWords({ words, removeWord }) {
   return (
-    <div>
+    <TogglableCard header="minun sanat">
       minun sanat:
       <ul>
         {words.map((w, i) => (
@@ -15,12 +16,12 @@ function MyWords({ words, removeWord }) {
               color="red"
               style={{ margin: '5px' }}
               circular
-              icon='delete'
+              icon="delete"
             />
           </li>
         ))}
       </ul>
-    </div>
+    </TogglableCard>
   )
 }
 
