@@ -24,6 +24,8 @@ const {
   addWordToUser,
   removeWord,
   toggleWord,
+  voteNewLetters,
+  startVoteNewLetters,
 } = require('./rooms')
 
 const { removeProperties } = require('./utils')
@@ -75,7 +77,15 @@ io.on('connection', socket => {
     io.emit('allUsers', allUsers())
   })
 
-  socket.on('getRoomsInfo', (roomName, callback) => {
+  socket.on('voteNewLetters', () => {
+    voteNewLetters(socket.id)
+  })
+
+  socket.on('startVoteNewLetters', () => {
+    startVoteNewLetters(socket.id)
+  })
+
+  socket.on('getRoomsInfo', callback => {
     // const room = allUsers().find(r => r.roomName === roomName)
     callback(allUsers())
   })
@@ -102,7 +112,7 @@ io.on('connection', socket => {
 
   socket.on('toggleWord', ({ user, word }) => {
     const { error } = toggleWord(user, word, socket.id)
-    if (error) {  
+    if (error) {
       // callback(error)
     } else {
       io.emit('allUsers', allUsers())

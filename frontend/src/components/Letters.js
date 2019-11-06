@@ -1,8 +1,6 @@
 import React from 'react'
 
-import { FaBackspace } from 'react-icons/fa'
-
-import { Button, Header } from 'semantic-ui-react'
+import { Button } from 'semantic-ui-react'
 
 function Letters({ letters }) {
   const btnSize = 90 / letters.length
@@ -20,7 +18,6 @@ function Letters({ letters }) {
           color="pink"
           key={'letter' + i}
         >
-          {/* <Header as="h2">{l}</Header> */}
           <span
             style={{
               color: 'black',

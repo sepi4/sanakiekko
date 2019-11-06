@@ -17,9 +17,10 @@ function Room({ socket, user }) {
   const [myWords, setMyWords] = useState(user.words)
   const [error, showError] = useCustomErrorHandler()
   const [checking, setChecking] = useState(false)
+  const [voting, setVoting] = useState(false)
 
   useEffect(() => {
-    socket.emit('getRoomsInfo', user.roomName, rooms => {
+    socket.emit('getRoomsInfo', rooms => {
       const room = rooms.find(r => r.roomName === user.roomName)
       setLetters(room.game.letters)
       setUsers(room.users.filter(u => u.connected))
@@ -41,7 +42,10 @@ function Room({ socket, user }) {
   }, [socket, user])
 
   const handleNewLetters = () => {
-    socket.emit('newLetters', user)
+    // socket.emit('newLetters', user)
+    socket.emit('startVoteNewLetters', () => {
+      console.log('callback')
+    })
   }
 
   const removeWord = word => {
@@ -50,8 +54,23 @@ function Room({ socket, user }) {
     })
   }
 
+  const vastaus = e => {
+    if (e.target.value === 'yes') {
+      socket.emit('voteNewLetters', () => {
+        console.log('callback')
+      })
+    } else {
+    }
+  }
+
   return (
     <div>
+      <div>
+        <p>Haluatko uudet kirjaimet?</p>
+        <button value='yes' onClick={vastaus}>kyllä</button>
+        <button value='no' onClick={vastaus}>ei</button>
+      </div>
+
       {error && <Message error header={error} />}
       <Button
         style={{ width: '100%', margin: '0 0 1rem 0' }}

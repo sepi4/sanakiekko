@@ -23,3 +23,4 @@ pvm   | aika (t) | tyo
 5.10  | 4        | pelin toiminnallisuuden tekemistä, esim. sanojen tarkistusta ja näyttämistä
 6.10  | 3        | refaktorointia, uusia komponentteja
 6.10  | 1.5      | css juttuja ja niiden kokeiluja
+6.10  | 1.5      | backend ja front, tekemässä äänestys toiminnallisuutta

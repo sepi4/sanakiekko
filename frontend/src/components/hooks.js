@@ -6,7 +6,6 @@ export function useCustomErrorHandler() {
   const [error, setError] = useState(null)
   const handleError = (error) => {
     setError(error)
-    // console.log('errorTimerId', errorTimerId)
     if (errorTimerId) {
       clearTimeout(errorTimerId)
     }

@@ -26,6 +26,13 @@ function addUser(id, name, roomName, socketId) {
         letters: [],
         active: false,
         checking: false,
+        votes: {
+          activeKey: '',
+          newLetters: {
+            yes: [],
+            no: [],
+          },
+        },
         rules: {
           maxWords: 3,
           minWordLength: 3,
@@ -197,6 +204,30 @@ function toggleWord(modifiedUser, word, accepterSocketId) {
   return { error: 'Server: virhe sanan togglauksessa' }
 }
 
+function voteNewLetters(socketId) {
+  let { room, user } = findRoomAndUser(socketId)
+  // TODO
+
+}
+
+function startVoteNewLetters(socketId) {
+  let { room, user } = findRoomAndUser(socketId)
+  let votesObj = room.game.votes
+  votesObj.activeKey = 'newLetters'
+  votesObj.newLetters.yes.push(user.id)
+  // TODO
+
+  setTimeout(() => {
+    votesObj.newLetters.yes = []
+    votesObj.newLetters.no = []
+    votesObj.activeKey = ''
+  }, 15000)
+}
+
+function checkVote(room) {
+  // TODO
+}
+
 module.exports = {
   addUser,
   connectUser,
@@ -207,4 +238,6 @@ module.exports = {
   addWordToUser,
   removeWord,
   toggleWord,
+  voteNewLetters,
+  startVoteNewLetters,
 }
