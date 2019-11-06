@@ -24,8 +24,7 @@ const {
   addWordToUser,
   removeWord,
   toggleWord,
-  voteNewLetters,
-  startVoteNewLetters,
+  votingStart,
 } = require('./rooms')
 
 const { removeProperties } = require('./utils')
@@ -82,10 +81,10 @@ io.on('connection', socket => {
   })
 
   socket.on('startVoteNewLetters', () => {
-    startVoteNewLetters(socket.id)
+    votingStart(socket.id, 'Uudet kirjaimet?')
   })
 
-  socket.on('getRoomsInfo', callback => {
+  socket.on('getRoomsInfo', (x, callback) => {
     // const room = allUsers().find(r => r.roomName === roomName)
     callback(allUsers())
   })

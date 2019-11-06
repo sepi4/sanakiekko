@@ -1,6 +1,7 @@
 const { newRandomLetters, subSet, toggleValueInArray } = require('./utils')
 
 let rooms = []
+let votingTimeout = undefined
 
 function addUser(id, name, roomName, socketId) {
   name = name.trim().toLowerCase()
@@ -26,18 +27,18 @@ function addUser(id, name, roomName, socketId) {
         letters: [],
         active: false,
         checking: false,
-        votes: {
-          activeKey: '',
-          newLetters: {
-            yes: [],
-            no: [],
-          },
-        },
         rules: {
           maxWords: 3,
           minWordLength: 3,
           lettersCount: 7,
         },
+      },
+      voting: {
+        active: false,
+        timer: 15000,
+        yes: [],
+        no: [],
+        question: '',
       },
     })
     roomToAdd = rooms[rooms.length - 1]
@@ -204,25 +205,47 @@ function toggleWord(modifiedUser, word, accepterSocketId) {
   return { error: 'Server: virhe sanan togglauksessa' }
 }
 
-function voteNewLetters(socketId) {
+function votingStart(socketId, question) {
+  console.log('votingStart')
   let { room, user } = findRoomAndUser(socketId)
-  // TODO
+  if (room.voting.active) {
+    return
+  } else {
+    room.voting.question = question
+    room.voting.yes.push(user.id)
+    votingCheck(room)
+  }
 
+  votingTimeout = setTimeout(() => {
+    console.log('votingStart setTimeout')
+    votingResult('NO', room)
+  }, room.voting.timer)
 }
 
-function startVoteNewLetters(socketId) {
-  let { room, user } = findRoomAndUser(socketId)
-  let votesObj = room.game.votes
-  votesObj.activeKey = 'newLetters'
-  votesObj.newLetters.yes.push(user.id)
-  // TODO
-
-  setTimeout(() => {
-    votesObj.newLetters.yes = []
-    votesObj.newLetters.no = []
-    votesObj.activeKey = ''
-  }, 15000)
+function votingResult(result, room) {
+  console.log(result)
+  room.voting = {
+    active: false,
+    yes: [],
+    no: [],
+    question: '',
+  }
+  clearTimeout(votingTimeout)
 }
+
+function votingCheck(room) {
+  const users = room.users.length
+  const yes = room.voting.yes.length
+  const no = room.voting.no.length
+  if (yes / users > 0.5) {
+    votingResult('YES', room)
+  }
+  if (no / users > 0.5) {
+    votingResult('NO', room)
+  }
+}
+
+function votingAnswer(socketId) {}
 
 function checkVote(room) {
   // TODO
@@ -238,6 +261,5 @@ module.exports = {
   addWordToUser,
   removeWord,
   toggleWord,
-  voteNewLetters,
-  startVoteNewLetters,
+  votingStart,
 }

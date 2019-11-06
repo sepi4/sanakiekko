@@ -19,21 +19,21 @@ function Room({ socket, user }) {
   const [checking, setChecking] = useState(false)
   const [voting, setVoting] = useState(false)
 
+  const roomSetters = rooms => {
+    const room = rooms.find(r => r.roomName === user.roomName)
+    setLetters(room.game.letters)
+    setUsers(room.users.filter(u => u.connected))
+    setMyWords(room.users.find(u => user.name === u.name).words)
+    setChecking(room.game.checking)
+  }
+
   useEffect(() => {
-    socket.emit('getRoomsInfo', rooms => {
-      const room = rooms.find(r => r.roomName === user.roomName)
-      setLetters(room.game.letters)
-      setUsers(room.users.filter(u => u.connected))
-      setMyWords(room.users.find(u => user.name === u.name).words)
-      setChecking(room.game.checking)
+    socket.emit('getRoomsInfo', undefined, rooms => {
+      roomSetters(rooms)
     })
 
     socket.on('allUsers', rooms => {
-      const room = rooms.find(r => r.roomName === user.roomName)
-      setLetters(room.game.letters)
-      setUsers(room.users.filter(u => u.connected))
-      setMyWords(room.users.find(u => user.name === u.name).words)
-      setChecking(room.game.checking)
+      roomSetters(rooms)
     })
 
     return () => {
@@ -42,7 +42,10 @@ function Room({ socket, user }) {
   }, [socket, user])
 
   const handleNewLetters = () => {
-    // socket.emit('newLetters', user)
+    socket.emit('newLetters', user)
+  }
+
+  const vote = () => {
     socket.emit('startVoteNewLetters', () => {
       console.log('callback')
     })
@@ -65,11 +68,23 @@ function Room({ socket, user }) {
 
   return (
     <div>
-      <div>
-        <p>Haluatko uudet kirjaimet?</p>
-        <button value='yes' onClick={vastaus}>kyllä</button>
-        <button value='no' onClick={vastaus}>ei</button>
-      </div>
+      {voting ? (
+        <div>
+          <p>Haluatko uudet kirjaimet?</p>
+          <button value="yes" onClick={vastaus}>
+            kyllä
+          </button>
+          <button value="no" onClick={vastaus}>
+            ei
+          </button>
+        </div>
+      ) : (
+        <div>
+          <button onClick={vote}>
+            vote
+          </button>
+        </div>
+      )}
 
       {error && <Message error header={error} />}
       <Button
