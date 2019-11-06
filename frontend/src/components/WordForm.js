@@ -45,9 +45,20 @@ function WordForm({ letters, socket }) {
 
   if (letters.length > 0) {
     return (
-      <Form error onSubmit={returnWord}>
-        <input ref={inputWord} type="text" onChange={testWord} />
-        <Button type="submit" disabled={error !== null} color="blue">
+      <Form error style={{ margin: '10px 0 35px 0' }} onSubmit={returnWord}>
+
+        <input
+          style={{ width: '70%', margin: '0' }}
+          ref={inputWord}
+          type="text"
+          onChange={testWord}
+        />
+        <Button
+          style={{ width: '30%', margin: '0' }}
+          type="submit"
+          disabled={error !== null}
+          color="blue"
+        >
           tallenna
         </Button>
         <Message error header={error} />

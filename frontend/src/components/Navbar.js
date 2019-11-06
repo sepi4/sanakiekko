@@ -12,7 +12,7 @@ function Navbar({ user, handleLogout }) {
         <Icon name="user" /> {user.name}
       </Menu.Item>
       <Menu.Item>
-        <Button onClick={handleLogout}>kirjaudu ulos</Button>
+        <Button onClick={handleLogout}>lopeta peli</Button>
       </Menu.Item>
     </Menu>
   )
