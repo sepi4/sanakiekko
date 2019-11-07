@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 
-import { Button, Message } from 'semantic-ui-react'
+import { Message } from 'semantic-ui-react'
 
 import WordForm from './WordForm'
 import PlayersList from './PlayersList'
@@ -17,6 +17,7 @@ function Room({ socket, user }) {
   const [users, setUsers] = useState([])
   const [myWords, setMyWords] = useState(user.words)
   const [error, showError] = useCustomErrorHandler()
+  const [info, showInfo] = useCustomErrorHandler()
   const [checking, setChecking] = useState(false)
   const [voting, setVoting] = useState(false)
 
@@ -27,6 +28,7 @@ function Room({ socket, user }) {
     setMyWords(room.users.find(u => user.name === u.name).words)
     setChecking(room.game.checking)
     setVoting(room.voting)
+    showInfo(room.info)
   }
 
   useEffect(() => {
@@ -41,12 +43,7 @@ function Room({ socket, user }) {
     return () => {
       socket.off('allUsers')
     }
-  }, [socket, user])
-
-  const handleNewLetters = () => {
-    socket.emit('newLetters', user)
-  }
-
+  }, [socket])
 
   const removeWord = word => {
     socket.emit('removeWord', word, error => {
@@ -54,17 +51,13 @@ function Room({ socket, user }) {
     })
   }
 
-
   return (
     <div>
-      <Voting socket={socket} voting={voting} />
       {error && <Message error header={error} />}
-      <Button
-        style={{ width: '100%', margin: '0 0 1rem 0' }}
-        onClick={handleNewLetters}
-      >
+      {info && <Message info header={info} />}
+      <Voting user={user} action="newLetters" socket={socket} voting={voting}>
         uudet kirjaimet
-      </Button>
+      </Voting>
       <Letters letters={letters} />
       {!checking ? (
         <>

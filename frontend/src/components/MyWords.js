@@ -5,7 +5,6 @@ import TogglableCard from './TogglableCard'
 function MyWords({ words, removeWord }) {
   return (
     <TogglableCard header="minun sanat">
-      minun sanat:
       <ul>
         {words.map((w, i) => (
           <li key={w.text + i} style={{ listStyle: 'none' }}>

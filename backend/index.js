@@ -14,6 +14,8 @@ const uuidv1 = require('uuid/v1')
 
 app.use(express.static(publicPath))
 
+let votingTimeout = undefined
+
 const {
   addUser,
   connectUser,
@@ -28,6 +30,7 @@ const {
   votingAnswer,
   votingResult,
   findRoomAndUser,
+  newInfo,
 } = require('./rooms')
 
 const { removeProperties } = require('./utils')
@@ -87,10 +90,15 @@ io.on('connection', socket => {
     let { room } = findRoomAndUser(socket.id)
     if (room.voting.active) return
 
-    const votingTimeout = setTimeout(() => {
+    votingTimeout = setTimeout(() => {
+      if (!room.voting.active) return
+
       votingResult('NO', room)
+      clearTimeout(votingTimeout)
+      votingTimeout = undefined
+
       io.emit('allUsers', allUsers())
-    }, room.voting.timer)
+    }, 10000)
 
     votingStart(socket.id, 'Uudet kirjaimet?', action)
     io.emit('allUsers', allUsers())

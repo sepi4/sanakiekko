@@ -2,6 +2,7 @@ const { newRandomLetters, subSet, toggleValueInArray } = require('./utils')
 
 let rooms = []
 let votingTimeout = undefined
+let action = undefined
 
 function addUser(id, name, roomName, socketId) {
   name = name.trim().toLowerCase()
@@ -21,6 +22,7 @@ function addUser(id, name, roomName, socketId) {
   let roomToAdd = rooms.find(r => r.roomName === roomName)
   if (!roomToAdd) {
     rooms.push({
+      info: undefined,
       roomName,
       users: [],
       game: {
@@ -35,7 +37,6 @@ function addUser(id, name, roomName, socketId) {
       },
       voting: {
         active: false,
-        timer: 10000,
         yes: [],
         no: [],
         question: '',
@@ -207,9 +208,9 @@ function toggleWord(modifiedUser, word, accepterSocketId) {
 
 function votingAnswer(socketId, answer) {
   let { room, user } = findRoomAndUser(socketId)
-  console.log(user.id)
-  console.log(room.voting.yes)
-  console.log(room.voting.no)
+  // console.log(user.id)
+  // console.log(room.voting.yes)
+  // console.log(room.voting.no)
   if (
     room.voting.active &&
     !room.voting.yes.find(id => id === user.id) &&
@@ -221,8 +222,18 @@ function votingAnswer(socketId, answer) {
   }
 }
 
-function votingStart(socketId, question, action) {
-  console.log('votingStart')
+function votingCheck(room) {
+  const users = room.users.length
+  const yes = room.voting.yes.length
+  const no = room.voting.no.length
+
+  if (yes * 2 > users) votingResult('YES', room)
+  else if (no * 2 > users) votingResult('NO', room)
+  else if (no + yes === users) votingResult('NO', room)
+}
+
+function votingStart(socketId, question, ac) {
+  action = ac
   let { room, user } = findRoomAndUser(socketId)
   if (room.voting.active) {
     return
@@ -230,7 +241,7 @@ function votingStart(socketId, question, action) {
     room.voting.active = true
     room.voting.question = `${user.name}: ${question}`
     room.voting.yes.push(user.id)
-    votingCheck(room, action)
+    votingCheck(room)
   }
 
   // votingTimeout = setTimeout(() => {
@@ -238,9 +249,8 @@ function votingStart(socketId, question, action) {
   // }, room.voting.timer)
 }
 
-function votingResult(result, room, action) {
+function votingResult(result, room) {
   console.log(result)
-
 
   if (result === 'YES') {
     switch (action) {
@@ -250,8 +260,12 @@ function votingResult(result, room, action) {
       default:
         break
     }
+    newInfo(room, 'Äänestyksen tulos: KYLLÄ')
+  } else if (result === 'NO') {
+    newInfo(room, 'Äänestyksen tulos: EI')
   }
 
+  action = undefined
   room.voting = {
     active: false,
     yes: [],
@@ -261,15 +275,13 @@ function votingResult(result, room, action) {
   // clearTimeout(votingTimeout)
 }
 
-function votingCheck(room, action) {
-  const users = room.users.length
-  const yes = room.voting.yes.length
-  const no = room.voting.no.length
-
-  if (yes * 2 > users) votingResult('YES', room, action)
-  if (no * 2 > users) votingResult('NO', room)
-  if (no + yes === users) votingResult('NO', room)
+function newInfo(room, str) {
+  room.info = str
+  setTimeout(() => {
+    room.info = undefined
+  }, 2000)
 }
+
 
 module.exports = {
   addUser,
@@ -285,4 +297,5 @@ module.exports = {
   votingAnswer,
   votingResult,
   findRoomAndUser,
+  newInfo,
 }

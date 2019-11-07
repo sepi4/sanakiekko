@@ -1,18 +1,24 @@
 import React, { useState } from 'react'
 
-import { Button, Card } from 'semantic-ui-react'
+import { Card } from 'semantic-ui-react'
 import { IoIosArrowUp, IoIosArrowDown } from 'react-icons/io'
 
-export default function TogglableCard({header, children }) {
+export default function TogglableCard({ header, children }) {
   const [show, setShow] = useState(true)
   return (
     <Card fluid>
-      <Button size='mini' onClick={() => setShow(!show)}>
+      <div
+        style={{
+          textAlign: 'center',
+          cursor: 'pointer',
+          background: 'linear-gradient(180deg, rgba(219,219,219,1) 0%, rgba(255,255,255,1) 100%)',
+        }}
+        size="mini"
+        onClick={() => setShow(!show)}
+      >
         {show ? <IoIosArrowUp /> : <IoIosArrowDown />} {header}
-      </Button>
-      {show && (
-        children
-      )}
+      </div>
+      {show && children}
     </Card>
   )
 }

@@ -26,3 +26,4 @@ pvm   | aika (t) | tyo
 6.10  | 1.5      | backend ja front, tekemässä äänestys toiminnallisuutta
 7.10  | 2.5      | hakkaan päätä seinään äänestyksen kanssa
 7.10  | 2.5      | sama kuin edellisessä
+7.10  | 4.5      | backend ja front - äänestyksen toiminto valmiiksi
