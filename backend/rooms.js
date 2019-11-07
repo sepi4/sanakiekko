@@ -35,7 +35,7 @@ function addUser(id, name, roomName, socketId) {
       },
       voting: {
         active: false,
-        timer: 15000,
+        timer: 5000,
         yes: [],
         no: [],
         question: '',
@@ -205,12 +205,27 @@ function toggleWord(modifiedUser, word, accepterSocketId) {
   return { error: 'Server: virhe sanan togglauksessa' }
 }
 
+// TODO PUSSHAA MONTA SAMAA IDta
+function votingAnswer(socketId, answer) {
+  let { room, user } = findRoomAndUser(socketId)
+  if (room.voting.active) {
+    if (answer === 'yes') {
+      room.voting.yes.push(user.id)
+    } 
+    if (answer === 'no') {
+      room.voting.no.push(user.id)
+    } 
+    votingCheck(room)
+  }
+}
+
 function votingStart(socketId, question) {
   console.log('votingStart')
   let { room, user } = findRoomAndUser(socketId)
   if (room.voting.active) {
     return
   } else {
+    room.voting.active = true
     room.voting.question = question
     room.voting.yes.push(user.id)
     votingCheck(room)
@@ -237,19 +252,15 @@ function votingCheck(room) {
   const users = room.users.length
   const yes = room.voting.yes.length
   const no = room.voting.no.length
-  if (yes / users > 0.5) {
+
+  if (yes * 2 > users) {
     votingResult('YES', room)
   }
-  if (no / users > 0.5) {
+  if (no * 2 > users) {
     votingResult('NO', room)
   }
 }
 
-function votingAnswer(socketId) {}
-
-function checkVote(room) {
-  // TODO
-}
 
 module.exports = {
   addUser,
@@ -262,4 +273,5 @@ module.exports = {
   removeWord,
   toggleWord,
   votingStart,
+  votingAnswer,
 }

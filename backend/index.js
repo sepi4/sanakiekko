@@ -25,6 +25,7 @@ const {
   removeWord,
   toggleWord,
   votingStart,
+  votingAnswer,
 } = require('./rooms')
 
 const { removeProperties } = require('./utils')
@@ -80,8 +81,14 @@ io.on('connection', socket => {
     voteNewLetters(socket.id)
   })
 
-  socket.on('startVoteNewLetters', () => {
+  socket.on('votingStart', () => {
     votingStart(socket.id, 'Uudet kirjaimet?')
+    io.emit('allUsers', allUsers())
+  })
+
+  socket.on('votingAnswer', (answer, callback) => {
+    votingAnswer(socket.id, answer)
+    io.emit('allUsers', allUsers())
   })
 
   socket.on('getRoomsInfo', (x, callback) => {
