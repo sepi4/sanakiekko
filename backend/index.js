@@ -26,6 +26,8 @@ const {
   toggleWord,
   votingStart,
   votingAnswer,
+  votingResult,
+  findRoomAndUser,
 } = require('./rooms')
 
 const { removeProperties } = require('./utils')
@@ -77,12 +79,20 @@ io.on('connection', socket => {
     io.emit('allUsers', allUsers())
   })
 
-  socket.on('voteNewLetters', () => {
-    voteNewLetters(socket.id)
-  })
+  // socket.on('voteNewLetters', () => {
+  //   voteNewLetters(socket.id)
+  // })
 
-  socket.on('votingStart', () => {
-    votingStart(socket.id, 'Uudet kirjaimet?')
+  socket.on('votingStart', action => {
+    let { room } = findRoomAndUser(socket.id)
+    if (room.voting.active) return
+
+    const votingTimeout = setTimeout(() => {
+      votingResult('NO', room)
+      io.emit('allUsers', allUsers())
+    }, room.voting.timer)
+
+    votingStart(socket.id, 'Uudet kirjaimet?', action)
     io.emit('allUsers', allUsers())
   })
 

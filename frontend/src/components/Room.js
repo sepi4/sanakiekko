@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 
-import { Button, Message, Progress } from 'semantic-ui-react'
+import { Button, Message } from 'semantic-ui-react'
 
 import WordForm from './WordForm'
 import PlayersList from './PlayersList'
@@ -8,6 +8,7 @@ import MyWords from './MyWords'
 import Letters from './Letters'
 import Checking from './Checking'
 import Chat from './Chat'
+import Voting from './Voting'
 
 import { useCustomErrorHandler } from './hooks'
 
@@ -25,7 +26,7 @@ function Room({ socket, user }) {
     setUsers(room.users.filter(u => u.connected))
     setMyWords(room.users.find(u => user.name === u.name).words)
     setChecking(room.game.checking)
-    setVoting(room.voting.active)
+    setVoting(room.voting)
   }
 
   useEffect(() => {
@@ -46,11 +47,6 @@ function Room({ socket, user }) {
     socket.emit('newLetters', user)
   }
 
-  const vote = () => {
-    socket.emit('votingStart', () => {
-      console.log('callback')
-    })
-  }
 
   const removeWord = word => {
     socket.emit('removeWord', word, error => {
@@ -58,37 +54,10 @@ function Room({ socket, user }) {
     })
   }
 
-  const answer = e => {
-    const a = e.target.value
-    socket.emit('votingAnswer', a, () => {
-      console.log('answer yes callback')
-    })
-  }
 
   return (
     <div>
-      {voting ? (
-        <div>
-          Haluatko uudet kirjaimet?
-          <Progress
-            style={{ width: '100%', margin: '0' }}
-            size="tiny"
-            percent={85}
-            color="blue"
-          />
-          <button value="yes" onClick={answer}>
-            kyllä
-          </button>
-          <button value="no" onClick={answer}>
-            ei
-          </button>
-        </div>
-      ) : (
-        <div>
-          <button onClick={vote}>vote</button>
-        </div>
-      )}
-
+      <Voting socket={socket} voting={voting} />
       {error && <Message error header={error} />}
       <Button
         style={{ width: '100%', margin: '0 0 1rem 0' }}
