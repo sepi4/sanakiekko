@@ -1,34 +1,49 @@
 import React from 'react'
 
-import { Button } from 'semantic-ui-react'
-
 function Letters({ letters }) {
   const btnSize = 90 / letters.length
   const margin = 10 / (letters.length * 2)
 
+  console.log('window.innerWidth', window.innerWidth)
+
   return (
-    <div style={{ margin: '15px 0 0 0' }}>
+    <div
+      style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        margin: '15px 0 0 0',
+      }}
+    >
       {letters.map((l, i) => (
-        <Button
+        <div
           style={{
             width: `${btnSize}%`,
-            height: `${btnSize}%`,
+            height: 50,
             margin: `${margin}%`,
+            background: '#dbdbdb',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+
+            borderRadius: 10,
+            // border: '2px solid grey',
+            textAlign: 'center',
           }}
-          color="pink"
           key={'letter' + i}
         >
           <span
             style={{
               color: 'black',
-              fontSize: '20px',
+              fontSize: '25px',
+              fontWeight: 'bold',
               textAlign: 'center',
               margin: `${margin}%`,
             }}
           >
             {l}
           </span>
-        </Button>
+        </div>
       ))}
     </div>
   )

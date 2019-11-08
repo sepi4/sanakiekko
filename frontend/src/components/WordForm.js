@@ -57,7 +57,6 @@ function WordForm({ letters, socket }) {
           style={{ width: '30%', margin: '0' }}
           type="submit"
           disabled={error !== null}
-          color="blue"
         >
           tallenna
         </Button>

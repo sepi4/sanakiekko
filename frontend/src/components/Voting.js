@@ -8,7 +8,6 @@ export default function Voting({ children, user, socket, voting, action }) {
     })
   }
 
-
   const answer = e => {
     const a = e.target.value
     socket.emit('votingAnswer', a, () => {
@@ -32,15 +31,15 @@ export default function Voting({ children, user, socket, voting, action }) {
             border: '2px solid red',
             textAlign: 'center',
             padding: 5,
-            borderRadius: 25,
+            borderRadius: 10,
           }}
         >
           {voting.countdown}
           <Header>{voting.question}</Header>
-          <Button color="black" value="yes" onClick={answer}>
+          <Button value="yes" onClick={answer}>
             kyllä
           </Button>
-          <Button color="black" value="no" onClick={answer}>
+          <Button value="no" onClick={answer}>
             ei
           </Button>
         </div>
