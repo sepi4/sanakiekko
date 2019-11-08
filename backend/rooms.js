@@ -2,7 +2,9 @@ const { newRandomLetters, subSet, toggleValueInArray } = require('./utils')
 
 let rooms = []
 let votingTimeout = undefined
+let votingInterval = undefined
 let action = undefined
+let io = undefined
 
 function addUser(id, name, roomName, socketId) {
   name = name.trim().toLowerCase()
@@ -36,6 +38,7 @@ function addUser(id, name, roomName, socketId) {
         },
       },
       voting: {
+        countdown: 10,
         active: false,
         yes: [],
         no: [],
@@ -232,8 +235,10 @@ function votingCheck(room) {
   else if (no + yes === users) votingResult('NO', room)
 }
 
-function votingStart(socketId, question, ac) {
+function votingStart(socketId, question, ac, io) {
+  io = io
   action = ac
+
   let { room, user } = findRoomAndUser(socketId)
   if (room.voting.active) {
     return
@@ -244,9 +249,21 @@ function votingStart(socketId, question, ac) {
     votingCheck(room)
   }
 
-  // votingTimeout = setTimeout(() => {
-  //   votingResult('NO', room)
-  // }, room.voting.timer)
+  //TODO send only what is nessary
+  votingInterval = setInterval(() => {
+    room.voting.countdown = room.voting.countdown - 1
+    // io.emit('allUsers', allUsers())
+    io.to(room.roomName).emit('allUsers', allUsers());
+  }, 1000)
+
+  votingTimeout = setTimeout(() => {
+    clearTimeout(votingTimeout)
+    clearInterval(votingInterval)
+    if (!room.voting.active) return
+    votingResult('NO', room)
+    // io.emit('allUsers', allUsers())
+    io.to(room.roomName).emit('allUsers', allUsers());
+  }, 10000)
 }
 
 function votingResult(result, room) {
@@ -267,12 +284,14 @@ function votingResult(result, room) {
 
   action = undefined
   room.voting = {
+    countdown: undefined,
     active: false,
     yes: [],
     no: [],
     question: '',
   }
-  // clearTimeout(votingTimeout)
+  clearTimeout(votingTimeout)
+  clearInterval(votingInterval)
 }
 
 function newInfo(room, str) {
@@ -281,6 +300,7 @@ function newInfo(room, str) {
     room.info = undefined
   }, 2000)
 }
+
 
 
 module.exports = {

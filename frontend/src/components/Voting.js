@@ -8,6 +8,7 @@ export default function Voting({ children, user, socket, voting, action }) {
     })
   }
 
+
   const answer = e => {
     const a = e.target.value
     socket.emit('votingAnswer', a, () => {
@@ -20,7 +21,7 @@ export default function Voting({ children, user, socket, voting, action }) {
     (voting.yes.find(id => id === user.id) ||
       voting.no.find(id => id === user.id))
   ) {
-    return <p>Odotetaan muiden vastausksia</p>
+    return <p>Odotetaan muiden vastauksia</p>
   }
 
   return (
@@ -28,12 +29,13 @@ export default function Voting({ children, user, socket, voting, action }) {
       {voting.active ? (
         <div
           style={{
-            background: 'pink',
+            border: '2px solid red',
             textAlign: 'center',
-            padding: 10,
+            padding: 5,
             borderRadius: 25,
           }}
         >
+          {voting.countdown}
           <Header>{voting.question}</Header>
           <Button color="black" value="yes" onClick={answer}>
             kyllä

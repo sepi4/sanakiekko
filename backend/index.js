@@ -22,7 +22,7 @@ const {
   removeUserNow,
   removeUserLater,
   allUsers,
-  newLetters,
+  // newLetters,
   addWordToUser,
   removeWord,
   toggleWord,
@@ -30,10 +30,10 @@ const {
   votingAnswer,
   votingResult,
   findRoomAndUser,
-  newInfo,
+  // newInfo,
 } = require('./rooms')
 
-const { removeProperties } = require('./utils')
+// const { removeProperties } = require('./utils')
 
 io.on('connection', socket => {
   socket.on('join', ({ name, room }, callback) => {
@@ -75,32 +75,32 @@ io.on('connection', socket => {
     io.emit('allUsers', allUsers())
   })
 
-  socket.on('newLetters', user => {
-    newLetters(socket.id)
-    // room = removeProperties(room)
-    // io.to(user.roomName).emit('updateRoomInfo', room)
-    io.emit('allUsers', allUsers())
-  })
-
-  // socket.on('voteNewLetters', () => {
-  //   voteNewLetters(socket.id)
+  // socket.on('newLetters', user => {
+  //   newLetters(socket.id)
+  //   io.emit('allUsers', allUsers())
   // })
 
   socket.on('votingStart', action => {
-    let { room } = findRoomAndUser(socket.id)
-    if (room.voting.active) return
+    // let { room } = findRoomAndUser(socket.id)
+    // if (room.voting.active) return
 
-    votingTimeout = setTimeout(() => {
-      if (!room.voting.active) return
+    // let votingInterval = setInterval(() => {
+    //   setCountdown(room)
+    //   io.emit('allUsers', allUsers())
+    // }, 1000)
 
-      votingResult('NO', room)
-      clearTimeout(votingTimeout)
-      votingTimeout = undefined
+    // votingTimeout = setTimeout(() => {
+    //   if (!room.voting.active) return
 
-      io.emit('allUsers', allUsers())
-    }, 10000)
+    //   votingResult('NO', room)
+    //   clearTimeout(votingTimeout)
+    //   votingTimeout = undefined
+    //   clearInterval(votingInterval)
 
-    votingStart(socket.id, 'Uudet kirjaimet?', action)
+    //   io.emit('allUsers', allUsers())
+    // }, 11000)
+
+    votingStart(socket.id, 'Uudet kirjaimet?', action, io)
     io.emit('allUsers', allUsers())
   })
 

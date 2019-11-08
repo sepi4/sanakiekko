@@ -51,6 +51,7 @@ function Room({ socket, user }) {
     })
   }
 
+  console.log('Room')
   return (
     <div>
       {error && <Message error header={error} />}
