@@ -4,8 +4,6 @@ function Letters({ letters }) {
   const btnSize = 90 / letters.length
   const margin = 10 / (letters.length * 2)
 
-  console.log('window.innerWidth', window.innerWidth)
-
   return (
     <div
       style={{
@@ -25,9 +23,7 @@ function Letters({ letters }) {
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
-
             borderRadius: 10,
-            // border: '2px solid grey',
             textAlign: 'center',
           }}
           key={'letter' + i}

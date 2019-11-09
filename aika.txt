@@ -29,3 +29,4 @@ pvm   | aika (t) | tyo
 7.10  | 4.5      | backend ja front - äänestyksen toiminto valmiiksi
 8.10  | 3        | countdown äänestyksessä, css 
 8.10  | 1        | css 
+9.10  | 1.5      | refaktoroin Room komponenttia, kokeilin useReduceria siihen muutin statin objektiksi
